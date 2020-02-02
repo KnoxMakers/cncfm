@@ -1,0 +1,223 @@
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Titillium Web Light'), local('TitilliumWeb-Light'), url(fonts/TitilliumWeb-Light.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Titillium Web Light'), local('TitilliumWeb-Light'), url(fonts/TitilliumWeb-Light.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+html {
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.clear {
+    clear: both;
+}
+
+.navbar-toggle {
+  margin-top: 4px;
+}
+
+#mainnavbar {
+  margin-top: 8px;
+}
+
+#brand {
+  font-size: 30px;
+  color: lightyellow;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 200;
+}
+
+#logo {
+  height: 33px;
+  vertical-align: text-top;
+  margin-right: 10px;
+  margin-top: 2px;
+  margin-left: 10px;
+}
+
+.btnMenu {
+  width: 200px;
+  text-align: center;
+  font-weight: 900;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.btn250 {
+    width: 250px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.25em;
+}
+
+#moveTable {
+  margin: auto;
+  border-width: 0px;
+  border-style: solid;
+  border-color: #ddd;
+}
+
+#moveTable button {
+  width: 75px;
+}
+
+#moveTable td {
+  padding: 10px;
+  text-align: center;
+}
+
+#moveTable i {
+  font-size: 3em;
+}
+
+a.files-file {
+  display: block;
+  padding: 10px;
+  text-decoration: none !important;
+  color: #555;
+}
+
+a.files-file:hover{
+  background-color: #ccc;
+  color: #333;
+}
+a.files-dir {
+    display: block;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none !important;
+    padding: 10px;
+}
+
+a.files-dir:hover{
+  background-color: #ccc;
+}
+
+#fileTable tbody i.fa-folder-open {
+  color: darkgreen;
+}
+
+#fileTable tbody i.fa-file {
+  color: #3498db;
+}
+
+.sidebar a.menuitem {
+  margin-left: -20px;
+  margin-right: -20px;
+  display: block;
+  width: 150%;
+  background-color: #ddd;
+  color: #000;
+  padding: 20px;
+  font-size: 1.5em;
+  text-align: left;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #bbb;
+  text-decoration: none;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  text-align: center;
+}
+.sidebar a.menuitem span.big {
+    display: block;
+    text-align: left;
+    width: 200px;
+}
+
+.sidebar a.menuitem:hover {
+  text-decoration: none;
+  background-color: #fff;
+}
+.sidebar a.menuitem.first {
+  border-width: 1px;
+}
+
+.sidebar a.menuitem i {
+  margin-right: 10px;
+}
+
+#fileTable thead th {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+#fileTable tbody {
+    font-size: 1.5em;
+}
+
+#fileTable tbody tr:nth-child(odd){
+    background-color: #fafafa;
+    border-radius: 5px;
+}
+
+#fileTable tbody td {
+    vertical-align: middle;
+    max-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#txtFilesUser {
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+
+.CodeMirror {
+    height: auto;
+    max-height: 500px;
+}
+.CodeMirror-scroll {
+    max-height: 500px;
+}
+
+.cm-comment {
+    color: #aaa !important;
+    font-style: italic;
+}
+
+.cm-command {
+    color: green !important;
+}
+
+.cm-coord {
+    color: #333;
+}
+
+
+table.file-header {
+    width: 100%;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+table.file-header {
+    font-size: 1.5em;
+    padding: 10px;
+    margin: 0px 0px 10px 0px;
+    border-style: solid;
+    border-color: #eee;
+    border-width: 0px 0px 1px 0px;
+}
+
+table.file-header  td.files-link a {
+    font-weight: bold;
+}
+
+table.gcode-header-table {
+    width: 100%;
+    white-space: nowrap;
+    table-layout: fixed;
+}

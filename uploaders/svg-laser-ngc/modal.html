@@ -1,0 +1,64 @@
+<div id='modal-svg-laser-ngc' class='modal fade' role='dialog'>
+    <div id='svg-laser-ngc-container' width='500' height='260' style='display: none;'><svg id='svg-laser-ngc-preview' viewBox="0 0 500 260" preserveAspectRatio="xMaxYMax slice"/></div>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <span class='pull-right'><select id='svg-laser-ngc-materials'></select></span>
+                <h4 class="modal-title">SVG Settings</h4>
+            </div>
+            <div class='modal-body'>
+                <table id='svg-laser-ngc-passes' class='table table-striped'>
+                <thead>
+                <th width=50>Pass</th>
+                <th width=75 align=center>Stroke</th>
+                <th>Mode</th>
+                <th width=125>Pulse</th>
+                <th width=125>Feedrate</th>
+                <th width=150>Power</th>
+                </thead>
+                <tbody>
+                </tbody>
+                </table>
+                <div class="panel panel-default" id='svg-laser-ngc-raster-settings'>
+                    <div class="panel-heading">Raster Settings</div>
+                    <div class="panel-body" id="svg-laser-ngc-raster-settings-content">
+                        <table width="100%" class='table'>
+                        <tr>
+                        <td>
+                        <div class="input-group">
+                            <span class="input-group-addon"><div style='width:200px;'>DPI</div></span>
+                            <input name="rasterDPI" type="number" class="form-control" placeholder="DPI" aria-describedby="label-advanced-raster-dpi" size="5" value="300" step='100' id='svg-laser-ngc-raster-dpi'>
+                            <span class="input-group-addon"><div style='width:200px;'>higher = longer time</div></span>
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                        <div class="input-group">
+                            <span class="input-group-addon"><div style='width:200px;'>POWER %</div></span>
+                            <input name="rasterPower" type="number" class="form-control" placeholder="DPI" aria-describedby="label-advanced-raster-dpi" size="5" min='10' max=100' value="30" step='5' id='svg-laser-ngc-raster-power'>
+                            <span class="input-group-addon"><div style='width:200px;'>higher = deeper</div></span>
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                        <div class="input-group">
+                            <span class="input-group-addon"><div style='width:200px;'>SPEED</div></span>
+                            <input name="rasterFeedrate" type="number" class="form-control" placeholder="DPI" aria-describedby="label-advanced-raster-dpi" size="5" value="1000" step='100' id='svg-laser-ngc-raster-feedrate'>
+                            <span class="input-group-addon"><div style='width:200px;'>lower = darker</div></span>
+                        </div>
+                        </td>
+                        </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button id='svg-laser-ngc-btnMorePasses' type='button' class='btn btn-default'>More Passes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id='svg-laser-ngc-btnCreate' type='button' class='btn btn-success'>Create</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+#svgPasses .sp-light {
+    margin-top: 6px;
+}
+
+#laser-ngc-view-container svg {
+  border-style: dotted;
+  border-color: #eee;
+  border-width: 1px;
+}
+
+#laser-ngc-view-obj image {
+  filter: invert(100%) grayscale(100%);
+}
+
+#laser-ngc-view-canvas {
+    background-color: #000;
+    border-style: dotted;
+    border-color: #ddd;
+    border-width: 1px;
+}
+
+div.CodeMirror-gutter {
+    background-color: #333;
+    margin-right: 5px;
+}
+
+#laser-ngc-tabView {
+    padding: 10px;
+    background-color: #000;
+    overflow: auto;
+    border-radius: 5px;
+}
+
+#txtGcodeEdit {
+    width: 100%;
+    font-family: monospace;
+}
+
+#svg-container {
+    width: 885px;
+    height: 461px;
+}
+
+#svg-preview {
+}
+
+.colorbox {
+    display: block;
+    width: 100px;
+}
+
+img.laser-ngc-raster-image-preview {
+    float: left;
+    margin-right: 50px;
+    margin-bottom: 10px;
+    height: auto;
+    width: auto;
+    max-height: 100px;
+    max-width: 200px;
+    -webkit-filter: grayscale(1);
+    filter: gray;
+    filter: grayscale(1);
+}
+
+#laser-ngc-raster-images {
+    margin-right: 200px;
+}
+
+#laser-ngc-view-statline {
+  width: 100%;
+  height: 25px;
+}
+
+#laser-ngc-view-distance {
+    font-family: monospace;
+    text-align: left;
+    color: #aaa;
+}
+#laser-ngc-view-time {
+    font-family: monospace;
+    text-align: right;
+    color: #aaa;
+}

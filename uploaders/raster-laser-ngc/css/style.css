@@ -1,0 +1,24 @@
+#raster-laser-ngc-modal-table {
+    margin: auto;
+}
+
+#raster-laser-ngc-modal-table td{
+    padding: 10px;
+}
+
+#raster-laser-ngc-modal-table .input-group-addon {
+    width: 150px;
+}
+
+#raster-laser-ngc-preview {
+    height: auto;
+    max-width: 600px;
+    max-height: 300px;
+    -webkit-filter: grayscale(1);
+    filter: gray;
+    filter: grayscale(1);
+}
+
+input.raster-laser-ngc-val {
+  width: 500px;
+}
