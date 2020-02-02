@@ -21,10 +21,13 @@ Other than the direct upload, these capabilities currently assume a LinuxCNC set
 
 Uploading an svg, choosing a preset for 3mm wood, setting light blue to preset engrave, black to preset cut, then creating the gcode file.
 
+---
 
 ![SVG Raster Upload](demo/laser-raster-upload.gif)
 
 Uploading an svg with an embedded bitmap image and a vector line to cut it out.  You can see that it creates two files: one for the raster engraving and one for the vector cutting.
+
+---
 
 ![NGC Viewer](demo/laser-ngc-viewer.gif)
 
