@@ -1,0 +1,143 @@
+<div id='svg2laser'>
+    <div id="svg-container"></div>
+    <br /><br />
+    <ul class="nav nav-tabs" id="svg2laserTabs">
+        <li class="nav-item"><a href="#svg2laser_tab_vector" class="nav-link active" data-bs-toggle="tab">
+                VECTOR SETTINGS
+            </a></li>
+        <li class="nav-item"><a href="#svg2laser_tab_raster" class="nav-link" data-bs-toggle="tab">
+                RASTER SETTINGS
+            </a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade active show" id="svg2laser_tab_vector">
+            <div id="vector-reading">
+                Processing upload.
+            </div>
+            <div id="vector-none" style="display: none;">
+                No vectors with stroke detected in upload.
+            </div>
+            <div id="pass-settings" style="display: none;">
+                <select class="form-control" id="presets">
+                    <option value="">CUSTOM MATERIAL</option>
+                </select>
+                <br />
+                <table id="passes" class="table-striped">
+                    <thead>
+                        <tr>
+                            <th width="100" style="text-align: center">Pass</th>
+                            <th width="100" style="text-align: center">Stroke</th>
+                            <th>Preset</th>
+                            <th width="200" title="mm/minute">Feedrate</th>
+                            <th width="200" title="%">Power</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <br /><br />
+                <center>
+                    <button id="btnsvg2laser_morepasses" class="btn btn-primary">
+                        <i class="bi bi-plus-square-fill"></i> &nbsp; ADD PASS
+                    </button>
+                </center>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="svg2laser_tab_raster">
+            <div id="raster-reading">
+                Processing upload.
+            </div>
+            <div id="raster-none" style="display: none;">
+                No embedded images detected in upload.
+            </div>
+            <div id="raster-settings" style="display: none;">
+                <table id='raster-table' width="100%">
+                    <tr>
+                        <td>ENABLE</td>
+                        <td>
+                            <select class='form-control' placeholder="ENABLE" id='svg2laser-raster-enable'>
+                                <option value="N">NO</option>
+                                <option value="Y">YES </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>METHOD</td>
+                        <td>
+                            <select class='form-control' placeholder="ALGORITHM" id='svg2laser-raster-method'>
+                                <option value="bjj">bjj/2x_laser </option>
+                                <option value="gcode">G-code</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DITHERING</td>
+                        <td>
+                            <select class='form-control' placeholder="DITHERING" id='svg2laser-raster-algorithm'>
+                                <option value="raw">None</option>
+                                <option value="floyd_steinberg">Error-Difussion: Floyd Steinberg</option>
+                                <option value="jajuni">Error-Difussion: Jarvis, Judice and Ninke</option>
+                                <option value="stucki">Error-Difussion: Stucki</option>
+                                <option value="atkinson">Error Difussion: Atkinson</option>
+                                <option value="burkes">Error-Difussion: Burkes</option>
+                                <option value="fan">Error-Difussion: Fan</option>
+                                <option value="sierra_lite">Error-Difussion: Sierra (Lite)</option>
+                                <option value="sierra">Error-Difussion: Sierra</option>
+                                <option value="two_row_sierra">Error-Difussion: Sierra (2-row)</option>
+                                <option value="bayer4x4">Ordered (4x4 Bayer)</option>
+                                <option value="bayer8x8">Ordered (8x8 Bayer)</option>
+                                <option value="cluster4x4">Ordered (4x4 Cluster)</option>
+                                <option value="cluster8x8">Ordered (8x8 Cluster)</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DPI</td>
+                        <td>
+                            <input class='form-control' type="number" placeholder="DPI" value="100" step='100'
+                                id='svg2laser-raster-dpi'>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>THRESHOLD</td>
+                        <td>
+                            <input class='form-control' type="number" placeholder="THRESHOLD" value="10" step='1'
+                                min="0" max="255" id='svg2laser-raster-threshold'>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MINIMUM POWER</td>
+                        <td>
+                            <div class="input-group">
+                                <input class='form-control' type="number" placeholder="POWER" value="10" step='1'
+                                    min="1" max="100" id='svg2laser-raster-minpower'>
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MAXIMUM POWER</td>
+                        <td>
+                            <div class="input-group">
+                                <input class='form-control' type="number" placeholder="POWER" value="70" step='1'
+                                    min="1" max="100" id='svg2laser-raster-maxpower'>
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>FEEDRATE</td>
+                        <td>
+                            <div class="input-group">
+                                <input class='form-control' type="number" placeholder="DPI" value="1500" step='100'
+                                    min="100" max="10000" id='svg2laser-raster-speed'>
+                                <span class="input-group-text">mm/min</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

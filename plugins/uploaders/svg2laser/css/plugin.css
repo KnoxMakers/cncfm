@@ -1,0 +1,67 @@
+#svg2laser #svg-container {
+    text-align: left;
+    padding: 0;
+    margin: auto;
+    max-width: 1000px;
+    max-height: 502px;
+    overflow: auto;
+    border-style: solid;
+    border-color: #eee;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+#svg2laser #svg-container svg {
+    max-width: 100%;
+    max-height: 500px;
+    border: 0;
+}
+
+#svg2laser #svg2laserTabs {
+    width: 1000px;
+    margin: auto;
+}
+
+#svg2laser .tab-pane {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #eee;
+    border-radius: 5px;
+    width: 1000px;
+    margin: auto;
+    padding: 25px;
+}
+
+#svg2laser #raster-settings {
+    text-align: left;
+    padding: 5px;
+    padding-top: 25px;
+    margin: auto;
+    max-width: 1000px;
+}
+
+#svg2laser #raster-settings #raster-table th {
+    padding: 5px;
+}
+
+#svg2laser #raster-settings #raster-table td {
+    padding: 5px;
+}
+
+#svg2laser #pass-settings {
+    text-align: left;
+    margin: auto;
+    max-width: 1000px;
+}
+
+#svg2laser #passes {
+    width: 100%;
+}
+
+#svg2laser #passes th {
+    padding: 5px 10px;
+}
+
+#svg2laser #passes td {
+    padding: 5px 10px;
+}

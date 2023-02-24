@@ -1,0 +1,13 @@
+api:
+- centralize error codes/descriptions
+
+plugins/viewers/gcode2D:
+- refactor legacy code
+- image save/cache for large files
+- power on detection configurable 
+
+files:
+- option to reprocess original instead of just download
+
+users:
+- add user to url?

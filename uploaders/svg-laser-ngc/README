@@ -1,3 +1,0 @@
-This handler converts an svg into ngc files appropriate for a laser
-running LinuxCNC with a configuration based on:
-https://github.com/bjj/2x_laser
