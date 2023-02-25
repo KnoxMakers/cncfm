@@ -2,3 +2,12 @@ plugins/uploaders/svg2laser/bin/inkscape.AppImage
 !/USERS/
 /USERS/*
 !/USERS/default/
+logs/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
