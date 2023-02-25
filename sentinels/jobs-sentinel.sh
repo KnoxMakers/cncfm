@@ -4,7 +4,7 @@ meuser="www-data"
 mepath="$(dirname -- "${BASH_SOURCE[0]}")"
 mename=`basename "$0"`
 
-exec &>> $mepath/logs/jobs.log
+exec &>> $mepath/../logs/jobs-sentinel.log
 
 for pid in $(pidof -x $mename); do
     if [ $pid != $$ ]; then

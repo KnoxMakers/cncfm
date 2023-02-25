@@ -4,7 +4,7 @@ meuser="cncfm"
 mepath="$(dirname -- "${BASH_SOURCE[0]}")"
 mename=`basename "$0"`
 
-exec &>> $mepath/logs/files.log
+exec &>> $mepath/../logs/files-sentinel.log
 
 for pid in $(pidof -x $mename); do
     if [ $pid != $$ ]; then
