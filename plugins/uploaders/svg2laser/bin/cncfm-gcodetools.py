@@ -3013,7 +3013,7 @@ class Gcodetools(inkex.EffectExtension):
 
             if self.selected_paths == {} and self.options.auto_select_paths:
                 self.selected_paths = self.paths
-                #self.error("No paths are selected! Trying to work on all available paths.")
+                # self.error("No paths are selected! Trying to work on all available paths.")
 
             if self.selected_paths == {}:
                 self.error("Nothing is selected. Please select something.")
@@ -3801,7 +3801,7 @@ class Gcodetools(inkex.EffectExtension):
         """
         if msg_type == "warning":
             # print_(s)
-            #inkex.errormsg(s + "\n")
+            # inkex.errormsg(s + "\n")
             pass
 
         elif msg_type == "error":
@@ -3810,9 +3810,9 @@ class Gcodetools(inkex.EffectExtension):
 
         else:
             pass
-            #print_("Unknown message type: {}".format(msg_type))
+            # print_("Unknown message type: {}".format(msg_type))
             # print_(s)
-            #raise inkex.AbortExtension(s)
+            # raise inkex.AbortExtension(s)
 
     ################################################################################
     # Set markers
@@ -4179,7 +4179,7 @@ class Gcodetools(inkex.EffectExtension):
 
         if self.selected_paths == {} and self.options.auto_select_paths:
             paths = self.paths
-            #self.error("No paths are selected! Trying to work on all available paths.")
+            # self.error("No paths are selected! Trying to work on all available paths.")
         else:
             paths = self.selected_paths
         self.check_dir()
@@ -4241,9 +4241,10 @@ class Gcodetools(inkex.EffectExtension):
                                 "{}: {}".format(tag, tags[tag]))
 
                     stroke = path.style('stroke')
-                    #FIX for cncfm
-                    colors[id_] = inkex.Color(stroke).to_rgb() if stroke else [-1, -1, -1]
-                        #stroke if stroke != None else "none").to_rgb()
+                    # FIX for cncfm
+                    colors[id_] = inkex.Color(
+                        stroke).to_rgb() if stroke else [-1, -1, -1]
+                    # stroke if stroke != None else "none").to_rgb()
                     if path.get("dxfpoint") == "1":
                         tmp_curve = self.transform_csp(csp, layer)
                         x = tmp_curve[0][0][0][0]
@@ -4255,7 +4256,7 @@ class Gcodetools(inkex.EffectExtension):
 
                         zd = self.Zcoordinates[layer][1]
                         zs = self.Zcoordinates[layer][0]
-                        c = 1. - float(sum(colors[id_])) / 255 / 3
+                        # c = 1. - float(sum(colors[id_])) / 255 / 3
                         # zdf = 0  # depth_func(c, zd, zs)
                         curves += [
                             [
@@ -4374,7 +4375,7 @@ class Gcodetools(inkex.EffectExtension):
         self.get_info_plus()
         if self.selected_paths == {} and self.options.auto_select_paths:
             paths = self.paths
-            #self.error("No paths are selected! Trying to work on all available paths.")
+            # self.error("No paths are selected! Trying to work on all available paths.")
         else:
             paths = self.selected_paths
         for layer in paths:
@@ -5950,7 +5951,7 @@ G01 Z1 (going to cutting z)\n""",
         self.get_info()
         if self.selected_paths == {} and self.options.auto_select_paths:
             paths = self.paths
-            #self.error("No paths are selected! Trying to work on all available paths.")
+            # self.error("No paths are selected! Trying to work on all available paths.")
         else:
             paths = self.selected_paths
 
@@ -6127,7 +6128,7 @@ G01 Z1 (going to cutting z)\n""",
             return
         if self.selected_paths == {} and self.options.auto_select_paths:
             paths = self.paths
-            #self.error("No paths are selected! Trying to work on all available paths.")
+            # self.error("No paths are selected! Trying to work on all available paths.")
         else:
             paths = self.selected_paths
         self.tool = []
@@ -6359,7 +6360,7 @@ G01 Z1 (going to cutting z)\n""",
             self.tab_orientation(self.layers[min(1, len(self.layers) - 1)])
             self.get_info()
         if self.tools == {}:
-            #self.error("Cutting tool has not been defined! A default tool has been automatically added.")
+            # self.error("Cutting tool has not been defined! A default tool has been automatically added.")
             self.options.tools_library_type = "default"
             self.tab_tools_library(self.layers[min(1, len(self.layers) - 1)])
             self.get_info()

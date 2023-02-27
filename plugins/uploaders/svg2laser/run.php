@@ -7,7 +7,7 @@ $config = $job["config"];
 // $datafile
 
 // convert objects to path
-$svg = tempnam(sys_get_temp_dir(), 'svg2gcode').".svg";
+$svg = tempnam(sys_get_temp_dir(), 'svg2gcode') . ".svg";
 $bin = __DIR__ . "/bin/inkscape.AppImage";
 $e = "$bin --actions=\"file-open:$datafile;select-all:no-groups;object-to-path;export-filename:$svg;export-do;file-close\"";
 $ret = bin_exec($e, $stdout, $stderr);
@@ -98,6 +98,7 @@ if (($options["has_raster"] > 0) && ($options["raster"]["enable"] == "Y")) {
     if (intval($ret) > 0) {
         job_error($user, $jobid, $stderr);
     } else {
+        error_log($stderr);
         error_log("$tmpname => $outfile");
         rename($tmpname, $outfile);
         chmod($outfile, 0770);

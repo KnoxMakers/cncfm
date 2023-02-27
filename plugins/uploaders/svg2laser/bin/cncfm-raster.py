@@ -1,3 +1,4 @@
+import sys
 import inkex
 from PIL import Image
 from dither import Dither
@@ -13,6 +14,9 @@ class svg2raster(inkex.EffectExtension):
     fp = None
     h = 0
     w = 0
+    x = None
+    y = None
+    on = False
 
     def add_arguments(self, pars):
         pars.add_argument("--filename", type=str, default="")
@@ -70,15 +74,21 @@ class svg2raster(inkex.EffectExtension):
         self.fp.write("\n")
         self.gcodeComment("options".center(30))
         self.gcodeComment("-"*30)
-        self.gcodeComment("     method: " + str(self.options.method), length=30)
-        self.gcodeComment("  algorithm: " + str(self.options.algorithm), length=30)
+        self.gcodeComment("     method: " +
+                          str(self.options.method), length=30)
+        self.gcodeComment("  algorithm: " +
+                          str(self.options.algorithm), length=30)
         self.gcodeComment("        dpi: " + str(self.options.dpi), length=30)
-        self.gcodeComment("   feedrate: " + str(self.options.feedrate), length=30)
-        self.gcodeComment("  threshold: " + str(self.options.threshold), length=30)
-        self.gcodeComment("   minpower: " + str(self.options.minpower), length=30)
-        self.gcodeComment("   maxpower: " + str(self.options.maxpower), length=30)
+        self.gcodeComment("   feedrate: " +
+                          str(self.options.feedrate), length=30)
+        self.gcodeComment("  threshold: " +
+                          str(self.options.threshold), length=30)
+        self.gcodeComment("   minpower: " +
+                          str(self.options.minpower), length=30)
+        self.gcodeComment("   maxpower: " +
+                          str(self.options.maxpower), length=30)
         self.fp.write("\n")
-        
+
     def gcodeFooter(self):
         if self.options.gcode_footer:
             self.fp.write(self.options.gcode_footer)
@@ -89,10 +99,12 @@ class svg2raster(inkex.EffectExtension):
         self.fp.write("({comment})\n".format(comment=comment))
 
     def gcodeOn(self):
+        self.on = True
         if self.options.gcode_on:
             self.fp.write(self.options.gcode_on)
 
     def gcodeOff(self):
+        self.on = False
         if self.options.gcode_off:
             self.fp.write(self.options.gcode_off)
 
@@ -101,6 +113,8 @@ class svg2raster(inkex.EffectExtension):
             self.fp.write("F{}\n".format(self.options.feedrate))
 
     def gcodeGo(self, x, y, g="G01"):
+        self.x = x
+        self.y = y
         self.fp.write(f"{g} X{x:.2f} Y{y:.2f}\n")
 
     def gcodePower(self, power):
@@ -123,35 +137,34 @@ class svg2raster(inkex.EffectExtension):
         irange.reverse()
         x1 = x
         y1 = y
-        dirtybit = True
         for i in irange:
             y1 = round((y-h) + (i * pixelSizeH), 2)
-            if dirtybit:
-                self.gcodeGo(x1, y1, 'G00')
-                self.gcodeOn()
+            if self.on:
+                self.gcodeOff()
             jrange = list(range(0, pixw+1))
             if direction < 0:
                 jrange.reverse()
-            dirtybit = False
             for j in jrange:
                 lastX = x1
                 x1 = round(x + (j * pixelSizeW), 2)
+                if direction < 0:
+                    gx = x1
+                else:
+                    gx = lastX
                 power = self.getPower(pixels[j-1, (pixh - i-1)])
-                #print(f"{j}: {x1}, {y1} => {power}")
-                if lastPower != power:
-                    if lastPower is not None:
-                        dirtybit = True
-                        if direction < 0:
-                            self.gcodeGo(x1, y1)
-                        else:
-                            self.gcodeGo(lastX, y1)
+                if power > 0 and not self.on:
+                    if self.x != gx or self.y != y:
+                        self.gcodeGo(gx, y1, "G00")
+                    self.gcodeOn()
+                if not self.on or lastPower != power:
+                    self.gcodeGo(gx, y1)
                     self.gcodePower(power)
-                    lastPower = power
-            if dirtybit:
+                lastPower = power
+            sys.stderr.write(f"r: {x1} ({gx}), {y1}, {power}, {direction}\n")
+            if self.on:
                 self.gcodeGo(x1, y1)
-                self.gcodeOff()
-                lastPower = None
-                direction *= -1
+
+            direction *= -1
 
     def getBjjImageFilename(self):
         d = self.options.bjj_image_dir.rstrip("/")
