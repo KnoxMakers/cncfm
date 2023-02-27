@@ -1,3 +1,4 @@
+config.json
 plugins/uploaders/svg2laser/bin/inkscape.AppImage
 !/USERS/
 /USERS/*
