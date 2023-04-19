@@ -36,6 +36,7 @@
     <script src='include/js/app.jobs.js'></script>
     <script src='include/js/app.plugins.uploaders.js'></script>
     <script src='include/js/app.plugins.viewers.js'></script>
+    <script src='include/js/highlightPathsInSvgPreview.js'></script>
 </head>
 
 <body>
