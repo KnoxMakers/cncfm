@@ -1,0 +1,125 @@
+{
+  "SITE_NAME": "CNCFM2",
+  "SITE_LOGO": "img/logo.png",
+  "COOKIE_PATH": "/",
+  "MULTI_USER": 1,
+  "USER_DIR": "/app/cncfm/USERS",
+  "PLUGIN_DIR": "/app/cncfm/plugins",
+  "BJJRASTER_DIR": "/app/cncfm/USERS/RASTER",
+  "REMOTES": [],
+  "MAX_FILESIZE": 25485760,
+  "UPLOADERS": {
+    "ngc": {
+      "name": "direct"
+    },
+    "nc": {
+      "name": "direct"
+    },
+    "gcode": {
+      "name": "direct"
+    },
+    "svg": {
+      "name": "svg2laser",
+      "config": {
+        "machine": {
+          "power-min": 0.07,
+          "power-max": 1.0,
+          "power-format": "%.2f",
+          "power-precision": 2,
+          "gcodeHeader": "%\n(Header)\nG21 (All units in mm)\nG64 P.001 Q.001\nG01 Z-0.000001 F10000\nS10000\n(/Header)\n\n",
+          "gcodeFooter": "\n\n(Footer)\nM2 (END)\n(/Footer)\n%\n",
+          "gcodePower": "M68 E0 Q{power}\n",
+          "gcodeOn": "M3\nM62 P0\n",
+          "gcodeOff": "M64 P0\nM5\n",
+          "bjjImageDir": "/app/USERS/RASTER"
+        },
+        "presets": {
+          "Baltic Birch [3mm]": {
+            "ENGRAVE": {
+              "f": 2100,
+              "p": 10
+            },
+            "CUT": {
+              "f": 1500,
+              "p": 50
+            }
+          },
+          "Baltic Birch [6mm]": {
+            "ENGRAVE": {
+              "f": 2100,
+              "p": 10
+            },
+            "CUT": {
+              "f": 800,
+              "p": 75
+            }
+          },
+          "Acrylic [3mm]": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 8
+            },
+            "CUT": {
+              "f": 1000,
+              "p": 50
+            }
+          },
+          "Acrylic [6mm]": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 8
+            },
+            "CUT": {
+              "f": 800,
+              "p": 75
+            }
+          },
+          "Cardboard": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 11
+            },
+            "CUT": {
+              "f": 1000,
+              "p": 35
+            }
+          },
+          "Cardstock": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 7
+            },
+            "CUT": {
+              "f": 3000,
+              "p": 11
+            }
+          }
+        },
+        "raster": {
+          "bjj": true,
+          "dpiDefault": 100,
+          "thresholdDefault": 10,
+          "powerMinDefault": 7,
+          "powerMaxDefault": 7,
+          "feedrateDefault": 4500
+        },
+        "inkscape": {
+          "bin": "/app/cncfm/bin/Inkscape.AppImage"  
+        }
+      }
+    }
+  },
+  "VIEWERS": {
+    "ngc": {
+      "name": "gcode2D",
+      "config": {
+        "width": 1300,
+        "height": 900,
+        "stroke-width": "0.5",
+        "s-power": false,
+        "power-min": 0.07,
+        "power-max": 1.0
+      }
+    }
+  }
+}

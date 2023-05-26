@@ -1,0 +1,123 @@
+{
+  "SITE_NAME": "CNCFM2",
+  "SITE_LOGO": "img/logo.png",
+  "COOKIE_PATH": "/",
+  "MULTI_USER": 1,
+  "USER_DIR": "/app/cncfm/USERS",
+  "PLUGIN_DIR": "/app/cncfm/plugins",
+  "BJJRASTER_DIR": "/app/cncfm/USERS/RASTER",
+  "INKSCAPE_APPIMAGE": "/app/cncfm/bin/Inkscape.AppImage",
+  "REMOTES": [],
+  "MAX_FILESIZE": 25485760,
+  "UPLOADERS": {
+    "ngc": {
+      "name": "direct"
+    },
+    "nc": {
+      "name": "direct"
+    },
+    "gcode": {
+      "name": "direct"
+    },
+    "svg": {
+      "name": "svg2laser",
+      "config": {
+        "machine": {
+          "power-min": 0,
+          "power-max": 255,
+          "power-format": "%d",
+          "power-precision": 2,
+          "gcodeHeader": "%\n(Header)\nG21 (All units in mm)\n(/Header)\n\n",
+          "gcodeFooter": "\n\n(Footer)\nM2 (END)\n(/Footer)\n%\n",
+          "gcodePower": "S{power}\n",
+          "gcodeOn": "M3\n",
+          "gcodeOff": "M5\n",
+          "bjjImageDir": "/app/USERS/RASTER"
+        },
+        "presets": {
+          "Baltic Birch [3mm]": {
+            "ENGRAVE": {
+              "f": 2100,
+              "p": 10
+            },
+            "CUT": {
+              "f": 1500,
+              "p": 50
+            }
+          },
+          "Baltic Birch [6mm]": {
+            "ENGRAVE": {
+              "f": 2100,
+              "p": 10
+            },
+            "CUT": {
+              "f": 800,
+              "p": 75
+            }
+          },
+          "Acrylic [3mm]": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 8
+            },
+            "CUT": {
+              "f": 1000,
+              "p": 50
+            }
+          },
+          "Acrylic [6mm]": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 8
+            },
+            "CUT": {
+              "f": 800,
+              "p": 75
+            }
+          },
+          "Cardboard": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 11
+            },
+            "CUT": {
+              "f": 1000,
+              "p": 35
+            }
+          },
+          "Cardstock": {
+            "ENGRAVE": {
+              "f": 3000,
+              "p": 7
+            },
+            "CUT": {
+              "f": 3000,
+              "p": 11
+            }
+          }
+        },
+        "raster": {
+          "bjj": false,
+          "dpiDefault": 300,
+          "thresholdDefault": 100,
+          "powerMinDefault": 7,
+          "powerMaxDefault": 7,
+          "feedrateDefault": 4500
+        }
+      }
+    }
+  },
+  "VIEWERS": {
+    "ngc": {
+      "name": "gcode2D",
+      "config": {
+        "width": 1220,
+        "height": 610,
+        "stroke-width": "0.5",
+        "s-power": true,
+        "power-min": 0,
+        "power-max": 255
+      }
+    }
+  }
+}
