@@ -45,11 +45,18 @@ usermod -a -G www-data cncfm
 
 # Make directories and set permissions
 mkdir -p $APPDIR 
+mkdir -p $APPDIR/logs
+mkdir -p $APPDIR/USERS/default
+mkdir -p $APPDIR/bin
 cp -rf $MEDIR/../* $APPDIR
+wget "https://inkscape.org/gallery/item/37359/Inkscape-b0a8486-x86_64.AppImage" -O $APPDIR/bin/inkscape.AppImage
 chown -R cncfm:www-data $BASEDIR
 chmod -R 750 $BASEDIR
 chmod -R 770 $APPDIR/USERS
+chmod -R 770 $APPDIR/logs
 
+# maybe i should ask which config to start with?
+cp $APPDIR/config.example.laserS.json $APPDIR/config.json
 
 # Setup Apache config
 echo "
@@ -95,7 +102,6 @@ command="${APPDIR}/sentinels/files-sentinel.sh"
 job="*/5 * * * * $command"
 chmod 700 $command
 cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
-$command
 
 
 # Install cron for jobs-sentinel and start
@@ -103,7 +109,6 @@ command="${APPDIR}/sentinels/jobs-sentinel.sh"
 job="*/5 * * * * $command"
 chmod 700 $command
 cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
-$command
 
 
 echo "######################################"
