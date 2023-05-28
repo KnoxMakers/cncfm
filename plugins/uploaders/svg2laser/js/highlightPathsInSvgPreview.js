@@ -1,4 +1,4 @@
-let supportedElements = "path, text, rect, ellipse, circle";
+let supportedElements = "path, text, rect, ellipse, circle, image";
 let unsupportedElements = "";
 let passcount = 3;
 //define a function that takes an SVG element as an argument and sets the opacity of its child elements to 0
@@ -33,14 +33,42 @@ function blinkInvalidElements(svg) {
 function adjustFillAndStroke(svg) {
     const childElements = svg.querySelectorAll(supportedElements);
     for (let i = 0; i < childElements.length; i++) {
-        setStyleAttribute(childElements[i], "fill", "none");
-        setStyleAttribute(childElements[i], "stroke-width", "1");
-        let strokeColor = childElements[i].style.stroke;
-        if (!strokeColor) {
-            strokeColor = childElements[i].parentElement.style.stroke;
-            if (strokeColor) childElements[i].style.stroke = strokeColor;
+        if (childElements[i].tagName == "image") {
+            childElements[i].style.opacity = 0.2;
+        } else {
+            setStyleAttribute(childElements[i], "fill", "none");
+            setStyleAttribute(childElements[i], "stroke-width", "1");
+
+            // Check if stroke color is defined in style property
+            let strokeColor = childElements[i].style.stroke;
+
+            if (!strokeColor) {
+                // First, check for stroke color defined in the stroke attribute
+                strokeColor = childElements[i].getAttribute("stroke");
+                if (strokeColor) {
+                    // If found, apply it to the style property
+                    childElements[i].style.stroke = strokeColor;
+                } else {
+                    // If still not found, check for stroke color defined in the parent's style property
+                    strokeColor = childElements[i].parentElement.style.stroke;
+                    if (strokeColor) {
+                        childElements[i].style.stroke = strokeColor;
+                    }
+                }
+            }
+            // adjust bounding box so we just see what's there
+            var bbox = svg.getBBox();
+            let margin = 5;
+            svg.setAttribute(
+                "viewBox",
+                [
+                    bbox.x - margin,
+                    bbox.y - margin,
+                    bbox.width + margin,
+                    bbox.height + margin,
+                ].join(" ")
+            );
         }
-        // childElements[i].
     }
 }
 
@@ -48,7 +76,6 @@ function hideAllButOneColorPath(svg, rgb) {
     const childElements = svg.querySelectorAll(supportedElements);
     for (let i = 0; i < childElements.length; i++) {
         const childElement = childElements[i];
-        // if (!childElement.style.stroke) {
         const strokeColor = childElement.style.stroke;
         const isMatchingColor = compareColors(strokeColor, rgb);
         if (isMatchingColor) {
@@ -56,7 +83,6 @@ function hideAllButOneColorPath(svg, rgb) {
         } else {
             childElement.style.opacity = "0.2";
         }
-        // }
     }
 }
 function revealAllPaths(svg, rgb) {
@@ -192,7 +218,7 @@ function watchForNewRows() {
             "DOMNodeInserted",
             (event) => {
                 //add small delay so the dom an fully update after adding element
-                setTimeout(addRow(), 4000);
+                setTimeout(() => addRow(), 20);
             },
             false
         );
@@ -200,4 +226,5 @@ function watchForNewRows() {
     //likewise there is a small delay after loading the svg
 }
 // call the watchForSvgElements function to start watching for SVG elements being added to the DOM
-watchForSvgElements();
+// watchForSvgElements();
+processSVG();

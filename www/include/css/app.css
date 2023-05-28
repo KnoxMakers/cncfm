@@ -123,9 +123,3 @@ table.table th {
 #cncfm-uploader-content {
     padding-bottom: 100px;
 }
-
-#passes tr.pass-settings:hover {
-    outline: #2c3d50;
-    outline-style: solid;
-    outline-width: 2px;
-}
