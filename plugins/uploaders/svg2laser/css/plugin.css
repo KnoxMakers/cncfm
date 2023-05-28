@@ -1,5 +1,9 @@
 #svg2laser {
     /* Create two columns */
+    /* Will be kept at a rough 3:2 ratio between 
+    first and second column according to flex: #; values.
+    Will reflow to single column layout if the sum of the
+    minimum widths can't be met with 1 row */
     display: flex;
     flex-flow: row;
     flex-wrap: wrap;
@@ -34,7 +38,6 @@
 }
 
 #svg2laser #svg2laserTabs {
-    /* width: 1000px; */
     margin: auto;
 }
 
@@ -57,8 +60,6 @@
     text-align: left;
     padding: 5px;
     padding-top: 25px;
-    /* margin: auto; */
-    /* max-width: 1000px; */
 }
 
 #svg2laser #raster-settings #raster-table th {
@@ -72,10 +73,9 @@
 #svg2laser #pass-settings {
     text-align: left;
     margin: auto;
-    /* max-width: 1000px; */
 }
 
-table#passes {
+#svg2laser table#passes {
     width: 100%;
 }
 
@@ -87,27 +87,27 @@ table#passes {
     padding: 5px 10px;
 }
 
-#svg2laserTabs {
+#svg2laser #svg2laserTabs {
     flex-wrap: nowrap;
     width: auto;
 }
 
-.sp-replacer.sp-light {
+#svg2laser .sp-replacer.sp-light {
     min-width: 50px;
 }
 
-#passes select[data-setting="mode"] {
+#svg2laser #passes select[data-setting="mode"] {
     min-width: 6.25em;
 }
 
-#passes input[data-setting="feedrate"] {
+#svg2laser #passes input[data-setting="feedrate"] {
     min-width: 5.5em;
 }
 
-#passes input[data-setting="power"] {
+#svg2laser #passes input[data-setting="power"] {
     min-width: 4.5em;
 }
 
-#passes div.input-group {
+#svg2laser #passes div.input-group {
     flex-wrap: nowrap;
 }
