@@ -48,7 +48,6 @@ function valid_name($name)
     }
 
     $regex = "/[^" . $_FVALID . "]/";
-    ini_set("pcre.jit", "0");
     if (preg_match($regex, $name)) {
         return false;
     }
@@ -72,9 +71,8 @@ function sanitize_name($name)
 {
     global $_FVALID;
     $regex = "/[^" . $_FVALID . "]/";
-    ini_set("pcre.jit", "0");
     $name = preg_replace("/^\.+/", "", $name);
-    ini_set("pcre.jit", "0");
+
     return preg_replace($regex, '_', $name);
 }
 
