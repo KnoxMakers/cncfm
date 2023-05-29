@@ -9,10 +9,15 @@ $config = $job["config"];
 // convert objects to path
 $svg = tempnam(sys_get_temp_dir(), 'svg2gcode') . ".svg";
 $bin = __DIR__ . "/bin/inkscape.AppImage";
-$e = "$bin --actions=\"file-open:$datafile;select-all:no-groups;object-to-path;export-filename:$svg;export-do;file-close\"";
-$ret = bin_exec($e, $stdout, $stderr);
-if (intval($ret) > 0) {
-    job_error($user, $jobid, $stderr);
+$bin = $config["inkscape"]["bin"];
+if (!empty($bin) && file_exists($bin)){
+    $e = "$bin --actions=\"file-open:$datafile;select-all:no-groups;object-to-path;export-filename:$svg;export-do;file-close\"";
+    $ret = bin_exec($e, $stdout, $stderr);
+    if (intval($ret) > 0) {
+        job_error($user, $jobid, $stderr);
+    }
+}else{
+    copy($datafile, $svg);
 }
 
 if ($options["has_vector"] > 0) {
@@ -34,10 +39,13 @@ if ($options["has_vector"] > 0) {
 
     $passes = [];
     $i = 1;
+    $minp = $config["machine"]["power-min"];
+    $maxp = $config["machine"]["power-max"];
+    $mpformat = $config["machine"]["power-format"];
     foreach ($options["passes"] as $pass) {
         $color = $pass["color"];
         $feedrate = $pass["feedrate"];
-        $power = $pass["power"] / 100.0;
+        $power = sprintf($mpformat, $minp + (($maxp-$minp)*($pass["power"] / 100.0)));
         $e1 .= " --laserpass=\"$color:$feedrate:$power\"";
         $i++;
     }
@@ -66,11 +74,13 @@ if (($options["has_raster"] > 0) && ($options["raster"]["enable"] == "Y")) {
     $outfile = make_path($user, $location, $outfilename);
     $bin1 = "/usr/bin/env python3 " . __DIR__ . "/bin/cncfm-raster.py";
 
+    $mpmin = $config["machine"]["power-min"];
     $mpmax = $config["machine"]["power-max"];
+    $mpformat = $config["machine"]["power-format"];
     $rpmin = $options["raster"]["minpower"];
     $rpmax = $options["raster"]["maxpower"];
-    $rpmin = $mpmax * $rpmin / 100.0;
-    $rpmax = $mpmax * $rpmax / 100.0;
+    $rpmin = sprintf($mpformat, $mpmin + ($mpmax-$mpmin) * ($rpmin / 100.0));
+    $rpmax = sprintf($mpformat, $mpmax * ($rpmax / 100.0));
 
     $e2 = "$bin1 --filename=$tmpname";
     $e2 .= " --gcode_header=\"" . $config["machine"]["gcodeHeader"] . "\"";

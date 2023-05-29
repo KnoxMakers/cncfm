@@ -22,15 +22,16 @@
       "name": "svg2laser",
       "config": {
         "machine": {
-          "power-min": 0.0,
+          "power-min": 0.07,
           "power-max": 1.0,
+          "power-format": "%.2f",
           "power-precision": 2,
           "gcodeHeader": "%\n(Header)\nG21 (All units in mm)\nG64 P.001 Q.001\nG01 Z-0.000001 F10000\nS10000\n(/Header)\n\n",
           "gcodeFooter": "\n\n(Footer)\nM2 (END)\n(/Footer)\n%\n",
           "gcodePower": "M68 E0 Q{power}\n",
           "gcodeOn": "M3\nM62 P0\n",
           "gcodeOff": "M64 P0\nM5\n",
-          "bjjImageDir": "/app/cncfm/USERS/RASTER"
+          "bjjImageDir": "/app/USERS/RASTER"
         },
         "presets": {
           "Baltic Birch [3mm]": {
@@ -101,8 +102,10 @@
           "powerMinDefault": 7,
           "powerMaxDefault": 7,
           "feedrateDefault": 4500
+        },
+        "inkscape": {
+          "bin": "/app/cncfm/bin/Inkscape.AppImage"  
         }
-
       }
     }
   },
@@ -112,7 +115,10 @@
       "config": {
         "width": 1300,
         "height": 900,
-        "stroke-width": "2px"
+        "stroke-width": "0.5",
+        "s-power": false,
+        "power-min": 0.07,
+        "power-max": 1.0
       }
     }
   }

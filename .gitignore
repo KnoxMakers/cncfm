@@ -1,5 +1,5 @@
 config.json
-plugins/uploaders/svg2laser/bin/inkscape.AppImage
+bin/inkscape.AppImage
 !/USERS/
 /USERS/*
 !/USERS/default/
@@ -12,3 +12,5 @@ __pycache__/
 
 # C extensions
 *.so
+
+.DS_Store

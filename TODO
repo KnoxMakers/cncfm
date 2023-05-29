@@ -4,10 +4,10 @@ api:
 plugins/viewers/gcode2D:
 - refactor legacy code
 - image save/cache for large files
-- power on detection configurable 
+- quick change of feedrates or power
 
 files:
 - option to reprocess original instead of just download
 
 users:
-- add user to url?
+- add user to url so links are shareable?
