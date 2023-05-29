@@ -65,3 +65,13 @@
 #svg2laser #passes td {
     padding: 5px 10px;
 }
+
+#passes tr.pass-settings {
+    outline: 2px solid transparent;
+    outline-offset: -1px;
+}
+
+#passes tr.pass-settings:hover {
+    outline: 2px solid #2c3d50;
+    outline-offset: -1px;
+}
