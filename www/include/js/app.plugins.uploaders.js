@@ -35,11 +35,12 @@ class cncfmPluginsUploaders {
                     $("#cncfm-uploader-content").html(u.html);
                     cncfm.uploaders.activeName = u.name;
                     cncfm.uploaders.activeConf = config;
-                    cncfm.uploaders.active = eval("new " + className + "(config)");
+                    cncfm.uploaders.active = eval(
+                        "new " + className + "(config)"
+                    );
                     cncfm.uploaders.active.activate(f);
                     cncfm.page.show("uploader");
-                }
-                catch (err) {
+                } catch (err) {
                     console.log(err);
                     cncfm.page.notify(err.message);
                 }
@@ -52,19 +53,26 @@ class cncfmPluginsUploaders {
                 if (uploader) {
                     cncfm.uploaders.uploaders[ext] = uploader;
                     if (!seen.has(uploader.name) && uploader.js) {
-                        $("body").append($("<script />", {
-                            html: uploader.js
-                        }));
+                        $("body").append(
+                            $("<script />", {
+                                html: uploader.js,
+                            })
+                        );
                     }
                     if (!seen.has(uploader.name) && uploader.css) {
-                        $("body").append($("<style />", {
-                            html: uploader.css
-                        }));
+                        $("body").append(
+                            $("<style />", {
+                                html: uploader.css,
+                            })
+                        );
                     }
                     seen.add(uploader.name);
                 }
             });
             cncfm.uploaders.loaded = true;
+            var filetypes =
+                "." + Object.keys(cncfm.uploaders.uploaders).join(",.");
+            $("#fileUpload").attr("accept", filetypes);
         });
 
         $(window).resize(function () {
