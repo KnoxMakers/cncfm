@@ -71,7 +71,7 @@ echo "
                 AllowOverride all
                 Require all granted
                 php_value post_max_size 100M
-                php_value upload_max_size 100M
+                php_value upload_max_filesize 100M
         </Directory>
 
         RewriteEngine On
