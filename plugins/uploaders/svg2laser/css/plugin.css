@@ -10,17 +10,37 @@
     width: 100%;
 }
 
+@media only screen and (min-width: 955px){
+    #svg2laser #svg-container {
+        height: calc(100vh - 140px);
+        padding: 5px;
+        border-radius: 5px 0px 0px 5px !important;
+        border-width: 1px 0px 1px 1px !important;
+    }
+    #svg2laser .tab-pane {
+        height: calc(100vh - 181px);
+        border-radius: 0px 0px 5px 0px !important;
+    }
+}
+
+@media only screen and (max-width: 955px){
+    #svg2laser #svg-container {
+        padding: 20px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        max-height: 250px;
+    }
+}
+
 #svg2laser #svg-container {
     text-align: left;
-    padding: 5px;
     flex: 3;
     overflow: auto;
     min-width: 400px;
-    max-height: calc(100vh - 175px);
     border-style: solid;
     border-color: #eee;
     border-width: 1px;
-    border-radius: 0px;
+    overflow: auto;
 }
 
 #svg2laser svg  {
