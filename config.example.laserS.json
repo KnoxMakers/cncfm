@@ -6,7 +6,6 @@
   "USER_DIR": "/app/cncfm/USERS",
   "PLUGIN_DIR": "/app/cncfm/plugins",
   "BJJRASTER_DIR": "/app/cncfm/USERS/RASTER",
-  "INKSCAPE_APPIMAGE": "/app/cncfm/bin/Inkscape.AppImage",
   "REMOTES": [],
   "MAX_FILESIZE": 25485760,
   "UPLOADERS": {
@@ -103,6 +102,9 @@
           "powerMinDefault": 7,
           "powerMaxDefault": 7,
           "feedrateDefault": 4500
+        },
+        "inkscape": {
+          "bin": "/app/cncfm/bin/Inkscape.AppImage"
         }
       }
     }
