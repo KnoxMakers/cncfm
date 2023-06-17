@@ -12,7 +12,7 @@
 
 #svg2laser #svg-container {
     text-align: left;
-    padding: 30px;
+    padding: 5px;
     flex: 3;
     overflow: auto;
     min-width: 400px;
@@ -20,7 +20,11 @@
     border-style: solid;
     border-color: #eee;
     border-width: 1px;
-    border-radius: 5px;
+    border-radius: 0px;
+}
+
+#svg2laser svg  {
+    overflow: visible;
 }
 
 #svg2laser #setting-container {
