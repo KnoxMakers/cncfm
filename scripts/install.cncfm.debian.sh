@@ -43,20 +43,37 @@ useradd cncfm
 usermod -a -G www-data cncfm
 
 
-# Make directories and set permissions
+# Make directories and copy/get files
 mkdir -p $APPDIR 
 mkdir -p $APPDIR/logs
 mkdir -p $APPDIR/USERS/default
 mkdir -p $APPDIR/bin
 cp -rf $MEDIR/../* $APPDIR
 wget "https://inkscape.org/gallery/item/37359/Inkscape-b0a8486-x86_64.AppImage" -O $APPDIR/bin/inkscape.AppImage
+
+
+# Ask user which example config to start
+CONFIGFILE=$(whiptail --nocancel --title "CNCFM INSTALL" --radiolist "Choose initial config" 20 58 10 \
+  "S" "Laser Power by S-code" ON \
+  "2.x" "Buildlog 2.x LinuxCNC          " OFF 3>&1 1>&2 2>&3)
+
+case "$CONFIGFILE" ] in
+"S_CODE")
+        cp $APPDIR/config.example.laserS.json $APPDIR/config.json
+        ;;
+"2.x")
+        cp $APPDIR/config.example.laser.linuxcnc.json $APPDIR/config.json
+        mkdir -p $APPDIR/USERS/RASTER
+        ;;
+esac
+
+
+# set permissions
 chown -R cncfm:www-data $BASEDIR
 chmod -R 750 $BASEDIR
 chmod -R 770 $APPDIR/USERS
 chmod -R 770 $APPDIR/logs
 
-# maybe i should ask which config to start with?
-cp $APPDIR/config.example.laserS.json $APPDIR/config.json
 
 # Setup Apache config
 echo "
