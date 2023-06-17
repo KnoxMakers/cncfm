@@ -110,8 +110,8 @@
 
 #svg2laser #passes div.input-group {
     flex-wrap: nowrap;
+}
 
-  
 #svg2laser #passes tr.pass-settings {
     outline: 2px solid transparent;
     outline-offset: -1px;

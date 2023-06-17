@@ -20,31 +20,40 @@ class cncfmPluginsUploaders {
             cncfm.uploaders.active.upload();
         });
 
-        $(document).on("change", "#fileUpload", function (e) {
-            let f = e.target.files[0];
-            cncfm.uploaders.f = f;
-            var u = cncfm.uploaders.get(f);
-            if (u) {
-                var className = "cncfmUploader_" + u.name;
-                cncfm.uploaders.activeName = u.name;
-                let config = {};
-                if (u.config) {
-                    config = u.config;
-                }
-                try {
-                    $("#cncfm-uploader-content").html(u.html);
-                    cncfm.uploaders.activeName = u.name;
-                    cncfm.uploaders.activeConf = config;
-                    cncfm.uploaders.active = eval("new " + className + "(config)");
-                    cncfm.uploaders.active.activate(f);
-                    cncfm.page.show("uploader");
-                }
-                catch (err) {
-                    console.log(err);
-                    cncfm.page.notify(err.message);
-                }
+        // ------- Drag and drop logic below -------
+        $(document).on("dragenter dragover", (e) => {
+            e.preventDefault();
+
+            // Add 'dragover' class only if '#cncfm-files' is visible and '#cncfm-uploader' is not.
+            if (
+                $("#cncfm-files").is(":visible") &&
+                !$("#cncfm-uploader").is(":visible")
+            ) {
+                $("body").addClass("dragover");
             }
         });
+
+        $(document).on("dragleave drop", (e) => {
+            e.preventDefault();
+            $("body").removeClass("dragover");
+        });
+
+        $(document).on("drop", (e) => {
+            e.preventDefault();
+            $("body").removeClass("dragover");
+
+            // Accept drops only if '#cncfm-files' is visible, '#cncfm-uploader' is not, and there are actually files dropped.
+            if (
+                $("#cncfm-files").is(":visible") &&
+                !$("#cncfm-uploader").is(":visible") &&
+                e.originalEvent.dataTransfer &&
+                e.originalEvent.dataTransfer.files.length
+            ) {
+                this.changeHandler(e.originalEvent.dataTransfer.files[0]);
+            }
+        });
+
+        $(document).on("change", "#fileUpload", this.changeHandler.bind(this));
 
         cncfm.api.call("plugins/uploaders", [], function (data) {
             let seen = new Set();
@@ -52,19 +61,26 @@ class cncfmPluginsUploaders {
                 if (uploader) {
                     cncfm.uploaders.uploaders[ext] = uploader;
                     if (!seen.has(uploader.name) && uploader.js) {
-                        $("body").append($("<script />", {
-                            html: uploader.js
-                        }));
+                        $("body").append(
+                            $("<script />", {
+                                html: uploader.js,
+                            })
+                        );
                     }
                     if (!seen.has(uploader.name) && uploader.css) {
-                        $("body").append($("<style />", {
-                            html: uploader.css
-                        }));
+                        $("body").append(
+                            $("<style />", {
+                                html: uploader.css,
+                            })
+                        );
                     }
                     seen.add(uploader.name);
                 }
             });
             cncfm.uploaders.loaded = true;
+            var filetypes =
+                "." + Object.keys(cncfm.uploaders.uploaders).join(",.");
+            $("#fileUpload").attr("accept", filetypes);
         });
 
         $(window).resize(function () {
@@ -72,6 +88,43 @@ class cncfmPluginsUploaders {
                 cncfm.uploaders.active.resize();
             }
         });
+    }
+
+    changeHandler(arg) {
+        let f;
+        if (arg instanceof File) {
+            // If 'arg' is an instance of 'File', we use it directly.
+            f = arg;
+        } else if (arg.target && arg.target.files[0]) {
+            // If 'arg' is an event object with a 'target' property,
+            // we extract the file from it.
+            f = arg.target.files[0];
+        } else {
+            // If 'arg' is neither a 'File' nor an event object with a 'target',
+            // we don't know how to handle it and thus return immediately.
+            return;
+        }
+        cncfm.uploaders.f = f;
+        var u = cncfm.uploaders.get(f);
+        if (u) {
+            var className = "cncfmUploader_" + u.name;
+            cncfm.uploaders.activeName = u.name;
+            let config = {};
+            if (u.config) {
+                config = u.config;
+            }
+            try {
+                $("#cncfm-uploader-content").html(u.html);
+                cncfm.uploaders.activeName = u.name;
+                cncfm.uploaders.activeConf = config;
+                cncfm.uploaders.active = eval("new " + className + "(config)");
+                cncfm.uploaders.active.activate(f);
+                cncfm.page.show("uploader");
+            } catch (err) {
+                console.log(err);
+                cncfm.page.notify(err.message);
+            }
+        }
     }
 
     get(f) {
@@ -90,7 +143,8 @@ class cncfmPluginsUploaders {
         var uploader = cncfm.uploaders.activeName;
         var config = cncfm.uploaders.activeConf;
         var url = cncfm.api.apiUrl + "/plugins/upload";
-        var data = new FormData($("#cncfm-upload")[0]);
+        var data = new FormData();
+        data.append("fileUpload", f);
         data.set("user", cncfm.users.get_user());
         data.set("location", cncfm.files.get_location());
         data.set("uploader", uploader);
