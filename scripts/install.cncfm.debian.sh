@@ -54,15 +54,15 @@ wget "https://inkscape.org/gallery/item/37359/Inkscape-b0a8486-x86_64.AppImage" 
 
 # Ask user which example config to start
 CONFIGFILE=$(whiptail --nocancel --title "CNCFM INSTALL" --radiolist "Choose initial config" 20 58 10 \
-  "S" "Laser Power by S-code" ON \
-  "2.x" "Buildlog 2.x LinuxCNC          " OFF 3>&1 1>&2 2>&3)
+  "LS" "LASER: Power by S-code" ON \
+  "L2x" "LASER: Buildlog 2.x/LinuxCNC          " OFF 3>&1 1>&2 2>&3)
 
 case "$CONFIGFILE" ] in
-"S_CODE")
-        cp $APPDIR/config.example.laserS.json $APPDIR/config.json
+"LS")
+        cp $APPDIR/example_configs/laser.S.json $APPDIR/config.json
         ;;
-"2.x")
-        cp $APPDIR/config.example.laser.linuxcnc.json $APPDIR/config.json
+"L2x")
+        cp $APPDIR/example_configs/laser.2x.json $APPDIR/config.json
         mkdir -p $APPDIR/USERS/RASTER
         ;;
 esac
@@ -99,7 +99,7 @@ echo "
 " > /etc/apache2/sites-available/cncfm.conf
 
 
-# Insure cncfm is the only site
+# Ensure cncfm is the only site
 a2dissite '*'
 a2ensite cncfm
 
