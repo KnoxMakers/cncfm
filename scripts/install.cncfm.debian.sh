@@ -57,7 +57,7 @@ CONFIGFILE=$(whiptail --nocancel --title "CNCFM INSTALL" --radiolist "Choose ini
   "LS" "LASER: Power by S-code" ON \
   "L2x" "LASER: Buildlog 2.x/LinuxCNC          " OFF 3>&1 1>&2 2>&3)
 
-case "$CONFIGFILE" ] in
+case "$CONFIGFILE" in
 "LS")
         cp $APPDIR/example_configs/laser.S.json $APPDIR/config.json
         ;;
