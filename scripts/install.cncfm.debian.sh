@@ -55,13 +55,13 @@ wget "https://inkscape.org/gallery/item/37359/Inkscape-b0a8486-x86_64.AppImage" 
 # Ask user which example config to start
 CONFIGFILE=$(whiptail --nocancel --title "CNCFM INSTALL" --radiolist "Choose initial config" 20 58 10 \
   "LS" "LASER: Power by S-code" ON \
-  "L2x" "LASER: Buildlog 2.x/LinuxCNC          " OFF 3>&1 1>&2 2>&3)
+  "LMOON" "LASER: Moonraker             " OFF 3>&1 1>&2 2>&3)
 
 case "$CONFIGFILE" in
 "LS")
         cp $APPDIR/example_configs/laser.S.json $APPDIR/config.json
         ;;
-"L2x")
+"LMOON")
         cp $APPDIR/example_configs/laser.2x.json $APPDIR/config.json
         mkdir -p $APPDIR/USERS/RASTER
         ;;

@@ -26,7 +26,7 @@
           "power-max": 1.0,
           "power-format": "%.2f",
           "power-precision": 2,
-          "gcodeHeader": "%\n(Header)\nG21 (All units in mm)\nG64 P.001 Q.001\nG01 Z-0.000001 F10000\nS10000\n(/Header)\n\n",
+          "gcodeHeader": "%\n(Header)\nG21 (All units in mm)\nG64 P.001 Q.001\nG01 Z-0.000001 F10000\nS10000\nM156\n(/Header)\n\n",
           "gcodeFooter": "\n\n(Footer)\nM2 (END)\n(/Footer)\n%\n",
           "gcodePower": "M68 E0 Q{power}\n",
           "gcodeOn": "M3\nM62 P0\n",
