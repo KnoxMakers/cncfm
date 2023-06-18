@@ -57,12 +57,14 @@ CONFIGFILE=$(whiptail --nocancel --title "CNCFM INSTALL" --radiolist "Choose ini
   "LS" "LASER: Power by S-code" ON \
   "LMOON" "LASER: Moonraker             " OFF 3>&1 1>&2 2>&3)
 
+echo "Initial Config: $CONFIGFILE"
+
 case "$CONFIGFILE" in
 "LS")
         cp $APPDIR/example_configs/laser.S.json $APPDIR/config.json
         ;;
 "LMOON")
-        cp $APPDIR/example_configs/laser.2x.json $APPDIR/config.json
+        cp $APPDIR/example_configs/laser.moonraker.json $APPDIR/config.json
         mkdir -p $APPDIR/USERS/RASTER
         ;;
 esac
@@ -129,6 +131,8 @@ cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
 
 
 echo "######################################"
+echo "#"
+echo "# config: $APPDIR/config.json"
 echo "#"
 echo "# CNCFM is installed @ http://${MEHOST}"
 echo "#"
