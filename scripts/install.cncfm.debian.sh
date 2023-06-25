@@ -49,7 +49,7 @@ mkdir -p $APPDIR/logs
 mkdir -p $APPDIR/USERS/default
 mkdir -p $APPDIR/bin
 cp -rf $MEDIR/../* $APPDIR
-wget "https://inkscape.org/gallery/item/37359/Inkscape-b0a8486-x86_64.AppImage" -O $APPDIR/bin/inkscape.AppImage
+wget "https://inkscape.org/gallery/item/37359/Inkscape-b0a8486-x86_64.AppImage" -O $APPDIR/bin/Inkscape.AppImage
 
 
 # Ask user which example config to start
