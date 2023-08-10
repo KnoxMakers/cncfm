@@ -31,7 +31,7 @@
           "gcodePower": "M68 E0 Q{power}\n",
           "gcodeOn": "M3\nM62 P0\n",
           "gcodeOff": "M64 P0\nM5\n",
-          "bjjImageDir": "/app/USERS/RASTER"
+          "bjjImageDir": "/app/cncfm/USERS/RASTER"
         },
         "presets": {
           "Baltic Birch [3mm]": {
