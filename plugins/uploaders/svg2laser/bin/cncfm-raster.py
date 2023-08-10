@@ -195,6 +195,7 @@ class svg2raster(inkex.EffectExtension):
         i, fname = self.getBjjImageFilename()
         img.save(fname)
         gap = 25.4 * (1/self.options.dpi)
+        self.gcodePower(self.options.maxpower)
         self.gcodeOn()
         self.fp.write("S0.000001\n")
         gcode = "O145 call [{}] [{}] [{}] [{}] [{}] [{}] [{}] [{}]\n"

@@ -1,5 +1,5 @@
 config.json
-bin/inkscape.AppImage
+bin/*
 !/USERS/
 /USERS/*
 !/USERS/default/

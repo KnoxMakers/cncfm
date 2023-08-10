@@ -8,10 +8,9 @@ $config = $job["config"];
 
 // convert objects to path
 $svg = tempnam(sys_get_temp_dir(), 'svg2gcode') . ".svg";
-$bin = __DIR__ . "/bin/inkscape.AppImage";
 $bin = $config["inkscape"]["bin"];
 if (!empty($bin) && file_exists($bin)){
-    $e = "$bin --actions=\"file-open:$datafile;select-all:no-groups;object-to-path;export-filename:$svg;export-do;file-close\"";
+    $e = "xvfb-run $bin --actions=\"file-open:$datafile;select-all:no-groups;object-to-path;export-filename:$svg;export-do;file-close\"";
     $ret = bin_exec($e, $stdout, $stderr);
     if (intval($ret) > 0) {
         job_error($user, $jobid, $stderr);

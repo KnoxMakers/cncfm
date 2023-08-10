@@ -65,7 +65,7 @@
                         <td>METHOD</td>
                         <td>
                             <select class='form-control' placeholder="ALGORITHM" id='svg2laser-raster-method'>
-                                <option value="bjj">bjj/2x_laser </option>
+                                <option value="bjj">Moonraker Stream </option>
                                 <option value="gcode">G-code</option>
                             </select>
                         </td>
@@ -105,7 +105,7 @@
                                 min="0" max="255" id='svg2laser-raster-threshold'>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="svg2laser-raster-minpower-row">
                         <td>MINIMUM POWER</td>
                         <td>
                             <div class="input-group">
@@ -116,7 +116,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>MAXIMUM POWER</td>
+                        <td id="svg2laser-raster-maxpower-label">MAXIMUM POWER</td>
                         <td>
                             <div class="input-group">
                                 <input class='form-control' type="number" placeholder="POWER" value="70" step='1'

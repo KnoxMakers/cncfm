@@ -34,7 +34,7 @@ apt dist-upgrade -y
 
 
 # Install needed software
-apt install -y vim apache2 php python3-pip libfuse2 sudo fuse rsync 
+apt install -y vim apache2 php python3-pip libfuse2 sudo fuse rsync xvfb
 pip3 install numpy lxml cssselect pillow pyinotify
 
 

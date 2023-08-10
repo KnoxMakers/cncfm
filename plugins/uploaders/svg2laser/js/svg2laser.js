@@ -22,6 +22,7 @@ class cncfmUploader_svg2laser {
             "#svg2laser .pass-setting[data-setting=power]"
         );
         $(document).off("click", "#btnsvg2laser_morepasses");
+        $(document).off("change", "#svg2laser-raster-method");
 
         $(document).on("change", "#svg2laser #presets", this.onPresetChange);
         $(document).on(
@@ -45,6 +46,7 @@ class cncfmUploader_svg2laser {
             this.onPowerChange
         );
         $(document).on("click", "#btnsvg2laser_morepasses", this.addPass);
+        $(document).on("change", "#svg2laser-raster-method", this.onRasterModeChange);
     }
 
     activate = function (f) {
@@ -58,6 +60,9 @@ class cncfmUploader_svg2laser {
 
         reader.readAsText(f);
         this.init();
+
+        cncfm.uploaders.active.onRasterModeChange();
+
         return true;
     };
 
@@ -147,9 +152,7 @@ class cncfmUploader_svg2laser {
             );
         }
 
-        console.log(me.config.raster.powerMaxDefault);
         if (me.config.raster.powerMaxDefault) {
-            console.log("yes");
             $("#svg2laser-raster-maxpower").val(
                 me.config.raster.powerMaxDefault
             );
@@ -158,6 +161,7 @@ class cncfmUploader_svg2laser {
         if (me.config.raster.feedrateDefault) {
             $("#svg2laser-raster-speed").val(me.config.raster.feedrateDefault);
         }
+
     };
 
     getPresetSelect = function () {
@@ -225,6 +229,17 @@ class cncfmUploader_svg2laser {
             $(tr).find(".pass-setting").prop("disabled", false);
         } else {
             $(tr).find(".pass-setting").prop("disabled", true);
+        }
+    };
+
+    onRasterModeChange = function() {
+        var mode = $("#svg2laser-raster-method").val();
+        $("#svg2laser-raster-minpower-row").hide();
+        if (mode == "bjj"){
+            $("#svg2laser-raster-maxpower-label").html("POWER");
+        }else if (mode == "gcode"){
+            $("#svg2laser-raster-maxpower-label").html("MAXIMUM POWER");
+            $("#svg2laser-raster-minpower-row").show();
         }
     };
 
