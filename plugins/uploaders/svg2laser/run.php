@@ -11,18 +11,13 @@ $svg = tempnam(sys_get_temp_dir(), 'svg2gcode') . ".svg";
 $bin = $config["inkscape"]["bin"];
 if (!empty($bin) && file_exists($bin)){
     $e = "xvfb-run $bin --actions=\"file-open:$datafile;select-all:no-groups;object-to-path;select-all:no-layers;selection-ungroup;export-filename:$svg;export-do;file-close\"";
-    error_log($e);
     $ret = bin_exec($e, $stdout, $stderr);
-    error_log($stdout);
-    error_log($stderr);
     if (intval($ret) > 0) {
         job_error($user, $jobid, $stderr);
     }
 }else{
     copy($datafile, $svg);
 }
-error_log("svg: $svg");
-//error_log(file_get_contents($svg));
 
 $newsvg = tempnam(sys_get_temp_dir(), 'svg2gcode') . ".svg";
 $bin = "/usr/bin/env python3 " . __DIR__ . "/bin/cncfm-root2layers.py";
@@ -32,12 +27,8 @@ if (intval($ret) > 0) {
     job_error($user, $jobid, $stderr);
 }
 file_put_contents($newsvg, $stdout);
-//error_log(file_get_contents($newsvg));
 
-error_log("svg: $svg");
-error_log("newsvg: $newsvg");
 $svg = $newsvg;
-error_log("svg: $svg");
 
 if ($options["has_vector"] > 0) {
     $tmpname = tempnam(sys_get_temp_dir(), 'svg2gcode.vector.');
@@ -70,8 +61,6 @@ if ($options["has_vector"] > 0) {
     }
 
     $e1 .= " $svg";
-
-    error_log($e1);
 
     $stdout = false;
     $stderr = "";
