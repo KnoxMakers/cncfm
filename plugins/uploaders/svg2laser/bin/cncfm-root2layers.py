@@ -1,6 +1,7 @@
 import inkex
 from inkex.elements import Group
 
+
 class CopyObjects(inkex.Effect):
     def __init__(self):
         inkex.Effect.__init__(self)
@@ -14,6 +15,7 @@ class CopyObjects(inkex.Effect):
                 cncfm_layer.append(elem)
 
         self.svg.add(cncfm_layer)
+
 
 if __name__ == "__main__":
     CopyObjects().run()

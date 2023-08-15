@@ -4244,8 +4244,8 @@ class Gcodetools(inkex.EffectExtension):
                     if not stroke:
                         stroke = path.get("stroke")
                     # FIX for cncfm
-                    colors[id_] = inkex.Color(stroke).to_rgb() if stroke else [-1, -1, -1]
-                    print(colors[id_])
+                    colors[id_] = inkex.Color(
+                        stroke).to_rgb() if stroke else [-1, -1, -1]
                     # stroke if stroke != None else "none").to_rgb()
                     if path.get("dxfpoint") == "1":
                         tmp_curve = self.transform_csp(csp, layer)
