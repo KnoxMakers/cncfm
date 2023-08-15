@@ -5,6 +5,7 @@ bin/*
 !/USERS/default/
 logs/
 *.svg
+*.ngc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
