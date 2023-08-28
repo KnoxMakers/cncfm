@@ -10,6 +10,32 @@ if (!function_exists('str_ends_with')) {
 
 include "common.php";
 
+function kill_queued($user)
+{
+    $killfile = make_path($user, ".cncfm", "kill", false);
+    if (file_exists($killfile)) {
+        $killpids = explode("\n", file_get_contents($killfile));
+        print_r($killpids);
+        foreach ($killpids as $pid) {
+            if (!empty($pid)) {
+                $pid = intval($pid);
+                echo "killing $pid\n";
+                $childProcesses = [];
+                $output = shell_exec("pgrep -P $pid");
+                if ($output) {
+                    $childProcesses = explode("\n", trim($output));
+                    foreach ($childProcesses as $childPID) {
+                        echo "killing child: $childPID\n";
+                        posix_kill($childPID, 9);
+                    }
+                }
+                posix_kill($pid, 9);
+            }
+        }
+        unlink($killfile);
+    }
+}
+
 function job_running($user)
 {
     $runfile = make_path($user, ".cncfm", "run", false);
@@ -132,6 +158,7 @@ function job_meta($user, $location, $origname, $newname, $data)
 $users = scandir($_C["USER_DIR"]);
 foreach ($users as $user) {
     if (valid_name($user)) {
+        kill_queued($user);
         if (!job_running($user)) {
             $jobid = get_job($user);
             if ($jobid) {

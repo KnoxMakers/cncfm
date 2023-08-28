@@ -1,6 +1,7 @@
 <?php
 
 include "../common.php";
+$log = "";
 
 $user = $_POST["user"];
 if (!valid_name($user)) {
@@ -25,13 +26,11 @@ if (!in_array($jobid, $valid_jobs)) {
 $runfile = make_path($user, ".cncfm", "run", false);
 $run = [];
 if (file_exists($runfile)) {
-    $run = explode("\n", file_get_contents($runfile))[0];
+    $run = explode("\n", file_get_contents($runfile));
     if ($jobid == $run[0]) {
-        // kill pid
-        $pid = $run[1];
-        if (!posix_kill($pid)) {
-            errormsg(-99, "KILLING OF RUNNING JOB FAILED (DID IT FINISH FIRST?)");
-        }
+        $pid = intval($run[1]);
+        $killfile = make_path($user, ".cncfm", "kill", false);
+        file_put_contents($killfile, $pid, FILE_APPEND);
     }
 }
 
@@ -43,6 +42,7 @@ foreach (glob($rmpath) as $f) {
 $output = [
     "status" => 1,
     "message" => "",
+    "log" => $log
 ];
 
 echo json_encode($output);

@@ -35,7 +35,9 @@ function make_path($user, $location, $filename = "", $sanitize = true)
         $dir .= "/$filename";
     }
 
-    if ($sanitize) {$dir = sanitize_path($dir);}
+    if ($sanitize) {
+        $dir = sanitize_path($dir);
+    }
     return $dir;
 }
 
@@ -131,8 +133,8 @@ function queue_upload($queue, $file)
     $datafile = make_path($queue["user"], ".cncfm", "$jobid.data", false);
     @mkdir(dirname($jobfile), 0770, true);
     if (!file_put_contents($jobfile, json_encode($queue))) {
-	error_log($jobfile);
-	error_log(print_r($queue, true));
+        error_log($jobfile);
+        error_log(print_r($queue, true));
         errormsg(-12, "UNABLE TO CREATE QUEUE. PERMISSIONS?");
     }
     rename($file, $datafile);
@@ -141,35 +143,37 @@ function queue_upload($queue, $file)
 
 function bin_exec($cmd, &$stdout = false, &$stderr = false)
 {
-    if ($stdout === false){ 
+    global $_PROC;
+
+    if ($stdout === false) {
         $pipe1 = ['file', '/dev/null', 'a'];
         $use_stdout = false;
-    }else{
+    } else {
         $pipe1 = ['pipe', 'w'];
         $use_stdout = true;
     }
 
-    if ($stderr === false){ 
+    if ($stderr === false) {
         $pipe2 = ['file', '/dev/null', 'a'];
         $use_stderr = false;
-    }else{
+    } else {
         $pipe2 = ['pipe', 'w'];
         $use_stderr = true;
     }
 
-    $proc = proc_open($cmd, [
+    $_PROC = proc_open($cmd, [
         1 => $pipe1,
         2 => $pipe2,
     ], $pipes);
-    if ($use_stdout){
+    if ($use_stdout) {
         $stdout = stream_get_contents($pipes[1]);
         fclose($pipes[1]);
     }
-    if ($use_stderr){
+    if ($use_stderr) {
         $stderr = stream_get_contents($pipes[2]);
         fclose($pipes[2]);
     }
-    return proc_close($proc);
+    return proc_close($_PROC);
 }
 
 function bin_filename($user, $path, $filename, $ext)
@@ -187,8 +191,10 @@ function bin_filename($user, $path, $filename, $ext)
 
 function rmTree($dir)
 {
-    if (!is_dir($dir)){ return false; }
-    $files = array_diff(scandir($dir), array('.','..'));
+    if (!is_dir($dir)) {
+        return false;
+    }
+    $files = array_diff(scandir($dir), array('.', '..'));
     foreach ($files as $file) {
         (is_dir("$dir/$file")) ? rmTree("$dir/$file") : unlink("$dir/$file");
     }
