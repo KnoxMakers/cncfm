@@ -34,8 +34,8 @@ apt dist-upgrade -y
 
 
 # Install needed software
-apt install -y vim apache2 php python3-pip libfuse2 sudo fuse rsync xvfb
-pip3 install numpy lxml cssselect pillow pyinotify
+apt install -y vim apache2 php python3-pip libfuse2 sudo fuse rsync xvfb python3-lxml python3-numpy python3-cssselect python3-pil python3-pyinotify
+#pip3 install numpy lxml cssselect pillow pyinotify
 
 
 # Create cncfm user and add to the www-data group
