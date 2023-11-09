@@ -39,7 +39,7 @@ apt install -y vim apache2 php python3-pip libfuse2 sudo fuse rsync xvfb python3
 
 
 # Create cncfm user and add to the www-data group
-useradd cncfm
+useradd -m cncfm 
 usermod -a -G www-data cncfm
 
 
