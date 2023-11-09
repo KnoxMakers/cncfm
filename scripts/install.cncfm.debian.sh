@@ -55,23 +55,25 @@ then
 fi
 
 
-# Ask user which example config to start
-CONFIGFILE=$(whiptail --nocancel --title "CNCFM INSTALL" --radiolist "Choose initial config" 20 58 10 \
-  "LS" "LASER: Power by S-code" ON \
-  "LMOON" "LASER: Moonraker             " OFF 3>&1 1>&2 2>&3)
+if [ ! -f $APPDIR/config.json ]
+then
+        # Ask user which example config to start
+        CONFIGFILE=$(whiptail --nocancel --title "CNCFM INSTALL" --radiolist "Choose initial config" 20 58 10 \
+        "LS" "LASER: Power by S-code" ON \
+        "LMOON" "LASER: Moonraker             " OFF 3>&1 1>&2 2>&3)
 
-echo "Initial Config: $CONFIGFILE"
+        echo "Initial Config: $CONFIGFILE"
 
-case "$CONFIGFILE" in
-"LS")
-        cp $APPDIR/example_configs/laser.S.json $APPDIR/config.json
-        ;;
-"LMOON")
-        cp $APPDIR/example_configs/laser.moonraker.json $APPDIR/config.json
-        mkdir -p $APPDIR/USERS/RASTER
-        ;;
-esac
-
+        case "$CONFIGFILE" in
+        "LS")
+                cp $APPDIR/example_configs/laser.S.json $APPDIR/config.json
+                ;;
+        "LMOON")
+                cp $APPDIR/example_configs/laser.moonraker.json $APPDIR/config.json
+                mkdir -p $APPDIR/USERS/RASTER
+                ;;
+        esac
+fi
 
 # set permissions
 chown -R cncfm:www-data $BASEDIR
