@@ -58,7 +58,7 @@ class FileSentinelEvent(pyinotify.ProcessEvent):
     def rsync(self, pathname=None):
         if not pathname:
             pathname = self.base
-        e = "rsync -a [localpath] [remote][remotepath] --delete --mkpath"
+        e = "rsync -a [localpath] [remote][remotepath] --delete" # --mkpath"
         self.cmd(e, pathname)
 
     def process_default(self, event):
