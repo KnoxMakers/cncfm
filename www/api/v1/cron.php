@@ -10,6 +10,20 @@ if (!function_exists('str_ends_with')) {
 
 include "common.php";
 
+function kill_chidren($pid, $depth = 1)
+{
+    $childProcesses = [];
+    $output = shell_exec("pgrep -P $pid");
+    if ($output) {
+        $childProcesses = explode("\n", trim($output));
+        foreach ($childProcesses as $childPID) {
+            kill_children($childPID, $depth + 1);
+            echo "killing child ($depth): $childPID\n";
+            posix_kill($childPID, 9);
+        }
+    }
+}
+
 function kill_queued($user)
 {
     $killfile = make_path($user, ".cncfm", "kill", false);
@@ -20,15 +34,7 @@ function kill_queued($user)
             if (!empty($pid)) {
                 $pid = intval($pid);
                 echo "killing $pid\n";
-                $childProcesses = [];
-                $output = shell_exec("pgrep -P $pid");
-                if ($output) {
-                    $childProcesses = explode("\n", trim($output));
-                    foreach ($childProcesses as $childPID) {
-                        echo "killing child: $childPID\n";
-                        posix_kill($childPID, 9);
-                    }
-                }
+                kill_children($pid);
                 posix_kill($pid, 9);
             }
         }
