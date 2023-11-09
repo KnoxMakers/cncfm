@@ -10,7 +10,7 @@ if (!function_exists('str_ends_with')) {
 
 include "common.php";
 
-function kill_chidren($pid, $depth = 1)
+function kill_children($pid, $depth = 1)
 {
     $childProcesses = [];
     $output = shell_exec("pgrep -P $pid");
