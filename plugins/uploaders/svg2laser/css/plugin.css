@@ -47,12 +47,20 @@
     overflow: visible;
 }
 
+#svg2laser svg image.show {
+    opacity: 1.0 !important;
+}
+
 #svg2laser #setting-container {
     flex: 2;
 }
 
 #svg2laser #svg2laser_tab_vector {
     width: 100%;
+}
+
+#svg2laser #svg2laser_tab_raster {
+    overflow-y: auto;
 }
 
 #svg2laser #svg-container svg {
@@ -144,4 +152,29 @@
 #svg2laser #passes tr.pass-settings:hover {
     outline: 2px solid #2c3d50;
     outline-offset: -1px;
+}
+
+#svg2laser #raster-image-table tr{
+    vertical-align: top;
+}
+
+#svg2laser #raster-image-table > tr > td {
+    padding: 50px 10px;
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: #ddd;
+}
+#svg2laser td.raster-image-preview {
+    text-align: center;
+    width: 50%;
+}
+
+#svg2laser img.raster-image-preview {
+    max-width: 500px;
+    filter: grayscale(100%);
+
+}
+
+#svg2laser img.raster-image-preview.inverted {
+    filter: invert();
 }

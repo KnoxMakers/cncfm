@@ -71,38 +71,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>DITHERING</td>
-                        <td>
-                            <select class='form-control' placeholder="DITHERING" id='svg2laser-raster-algorithm'>
-                                <option value="raw">None</option>
-                                <option value="floyd_steinberg">Error-Difussion: Floyd Steinberg</option>
-                                <option value="jajuni">Error-Difussion: Jarvis, Judice and Ninke</option>
-                                <option value="stucki">Error-Difussion: Stucki</option>
-                                <option value="atkinson">Error Difussion: Atkinson</option>
-                                <option value="burkes">Error-Difussion: Burkes</option>
-                                <option value="fan">Error-Difussion: Fan</option>
-                                <option value="sierra_lite">Error-Difussion: Sierra (Lite)</option>
-                                <option value="sierra">Error-Difussion: Sierra</option>
-                                <option value="two_row_sierra">Error-Difussion: Sierra (2-row)</option>
-                                <option value="bayer4x4">Ordered (4x4 Bayer)</option>
-                                <option value="bayer8x8">Ordered (8x8 Bayer)</option>
-                                <option value="cluster4x4">Ordered (4x4 Cluster)</option>
-                                <option value="cluster8x8">Ordered (8x8 Cluster)</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
                         <td>DPI</td>
                         <td>
                             <input class='form-control' type="number" placeholder="DPI" value="100" step='100'
                                 id='svg2laser-raster-dpi'>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>THRESHOLD</td>
-                        <td>
-                            <input class='form-control' type="number" placeholder="THRESHOLD" value="10" step='1'
-                                min="0" max="255" id='svg2laser-raster-threshold'>
                         </td>
                     </tr>
                     <tr id="svg2laser-raster-minpower-row">
@@ -135,6 +107,9 @@
                             </div>
                         </td>
                     </tr>
+                </table>
+                <hr/>
+                <table id="raster-image-table" width="100%">
                 </table>
             </div>
         </div>
