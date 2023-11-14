@@ -170,9 +170,13 @@
 }
 
 #svg2laser img.raster-image-preview {
-    max-width: 500px;
+    max-width: 400px;
     filter: grayscale(100%);
 
+}
+
+#svg2laser td.raster-image-preview-settings {
+    min-width: 200px;
 }
 
 #svg2laser img.raster-image-preview.inverted {
