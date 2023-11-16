@@ -11,10 +11,7 @@ class cncfmUploader_svg2laser {
     $(document).off("change", "#svg2laser #presets");
     $(document).off("change.spectrum", "#svg2laser .colorpicker");
     $(document).off("change", "#svg2laser .pass-setting[data-setting=mode]");
-    $(document).off(
-      "change",
-      "#svg2laser .pass-setting[data-setting=feedrate]"
-    );
+    $(document).off("change", "#svg2laser .pass-setting[data-setting=feedrate]");
     $(document).off("change", "#svg2laser .pass-setting[data-setting=power]");
     $(document).off("click", "#btnsvg2laser_morepasses");
     $(document).off("change", "#svg2laser-raster-method");
@@ -23,47 +20,15 @@ class cncfmUploader_svg2laser {
     $(document).off("mouseout", "#svg2laser .raster-image-preview-row");
 
     $(document).on("change", "#svg2laser #presets", this.onPresetChange);
-    $(document).on(
-      "change.spectrum",
-      "#svg2laser .colorpicker",
-      this.onColorChange
-    );
-    $(document).on(
-      "change",
-      "#svg2laser .pass-setting[data-setting=mode]",
-      this.onModeChange
-    );
-    $(document).on(
-      "change",
-      "#svg2laser .pass-setting[data-setting=feedrate]",
-      this.onFeedrateChange
-    );
-    $(document).on(
-      "change",
-      "#svg2laser .pass-setting[data-setting=power]",
-      this.onPowerChange
-    );
+    $(document).on("change.spectrum", "#svg2laser .colorpicker", this.onColorChange);
+    $(document).on("change", "#svg2laser .pass-setting[data-setting=mode]", this.onModeChange);
+    $(document).on("change", "#svg2laser .pass-setting[data-setting=feedrate]", this.onFeedrateChange);
+    $(document).on("change", "#svg2laser .pass-setting[data-setting=power]", this.onPowerChange);
     $(document).on("click", "#btnsvg2laser_morepasses", this.addPass);
-    $(document).on(
-      "change",
-      "#svg2laser-raster-method",
-      this.onRasterModeChange
-    );
-    $(document).on(
-      "change",
-      "#svg2laser .raster-image-preview-setting",
-      this.onRasterImagePreviewSetting
-    );
-    $(document).on(
-      "mouseover",
-      "#svg2laser .raster-image-preview-row",
-      this.onRasterImagePreviewMouseOver
-    );
-    $(document).on(
-      "mouseout",
-      "#svg2laser .raster-image-preview-row",
-      this.onRasterImagePreviewMouseOut
-    );
+    $(document).on("change", "#svg2laser-raster-method", this.onRasterModeChange);
+    $(document).on("change", "#svg2laser .raster-image-preview-setting", this.onRasterImagePreviewSetting);
+    $(document).on("mouseover", "#svg2laser .raster-image-preview-row", this.onRasterImagePreviewMouseOver);
+    $(document).on("mouseout", "#svg2laser .raster-image-preview-row", this.onRasterImagePreviewMouseOut);
   }
 
   activate = function (f) {
@@ -176,9 +141,7 @@ class cncfmUploader_svg2laser {
     var mat = $("#svg2laser #presets").val();
     var config = this.config;
 
-    var s = $("<select>")
-      .addClass("form-control pass-setting")
-      .attr("data-setting", "mode");
+    var s = $("<select>").addClass("form-control pass-setting").attr("data-setting", "mode");
     $(s).append("<option val='CUSTOM'>CUSTOM</option>");
 
     if (mat && config && config.presets && config.presets[mat]) {
@@ -206,13 +169,7 @@ class cncfmUploader_svg2laser {
     var mat = $("#svg2laser #presets").val();
     var config = cncfm.uploaders.active.config;
 
-    if (
-      mat &&
-      config &&
-      config.presets &&
-      config.presets[mat] &&
-      config.presets[mat][val]
-    ) {
+    if (mat && config && config.presets && config.presets[mat] && config.presets[mat][val]) {
       var f = config.presets[mat][val]["f"];
       var p = config.presets[mat][val]["p"];
       $(tr).find("input[data-setting=feedrate]").val(f);
@@ -262,7 +219,8 @@ class cncfmUploader_svg2laser {
   };
 
   onRasterImagePreviewSetting = function () {
-    console.log($(this).val());
+    var field = $(this).attr("raster-field");
+    var val = $(this).val();
     var svgid = $(this).attr("svgid");
     var sel = ".raster-image-preview-setting[svgid=" + svgid + "]";
     var filter = "opacity(100%) grayscale(100%)";
@@ -279,10 +237,8 @@ class cncfmUploader_svg2laser {
     filter += " contrast(" + contrastval + ")";
 
     $("img.raster-image-preview[svgid=" + svgid + "]").css("filter", filter);
-    $("#svg2laser #svg-container image[id=" + svgid + "]").css(
-      "filter",
-      filter
-    );
+    $("#svg2laser #svg-container image[id=" + svgid + "]").css("filter", filter);
+    $(".raster-image-preview-setting-label[svgid=" + svgid + "][raster-field=" + field + "]").html(" = " + val);
   };
 
   addPass = function () {
@@ -292,28 +248,20 @@ class cncfmUploader_svg2laser {
     var td1 = $("<td>").css("text-align", "center").html(i);
 
     var td2 = $("<td>").css("text-align", "center");
-    var c = $("<input type='text'>")
-      .addClass("pass-setting colorpicker")
-      .attr("data-setting", "color");
+    var c = $("<input type='text'>").addClass("pass-setting colorpicker").attr("data-setting", "color");
     $(td2).append(c);
 
     var td3 = $("<td>");
-    var ps = cncfm.uploaders.active
-      .getPresetSelect()
-      .attr("disabled", "disabled");
+    var ps = cncfm.uploaders.active.getPresetSelect().attr("disabled", "disabled");
     $(td3).append(ps);
 
     var td4 = $("<td>");
-    var ifeed = $(
-      "<input type='number' step='100' min='100' maxsize='5' class='form-control pass-setting' data-setting='feedrate' disabled='disabled'>"
-    );
+    var ifeed = $("<input type='number' step='100' min='100' maxsize='5' class='form-control pass-setting' data-setting='feedrate' disabled='disabled'>");
     $(td4).append(ifeed);
 
     var td5 = $("<td>");
     var ipwrgroup = $("<div class='input-group'>");
-    var ipwr = $(
-      "<input class='form-control pass-setting' type='number' step=1 min=1 max=100 data-setting='power' disabled='disabled'>"
-    );
+    var ipwr = $("<input class='form-control pass-setting' type='number' step=1 min=1 max=100 data-setting='power' disabled='disabled'>");
     var ipwraddon = $("<span class='input-group-text'>%</span>");
     $(ipwrgroup).append(ipwr).append(ipwraddon);
     $(td5).append(ipwrgroup);
@@ -341,81 +289,108 @@ class cncfmUploader_svg2laser {
   }
 
   loadRasterImageTable() {
+    function makeSpacer() {
+      var tr = $("<tr>");
+      var td = $("<td>");
+      $(td).append($("<hr>"));
+      $(tr).append(td);
+      return tr;
+    }
+
+    function makeSelect(svgid, id, name, options) {
+      var tr = $("<tr>");
+      var td = $("<td>");
+
+      var label = $("<label for='' class='form-label'>" + name + "</label>");
+      var input = $("<select>").addClass("form-select");
+      $(input).addClass("raster-image-preview-setting");
+      $(input).attr("raster-field", id).attr("svgid", svgid);
+      $.each(options, function (key, val) {
+        $(input).append($("<option>", { value: key, text: val }));
+      });
+      //$(td).append(label);
+      $(td).append(input);
+      $(tr).append(td);
+      return tr;
+    }
+
+    function makeRange(svgid, id, name, min, max, step, val) {
+      var tr = $("<tr>");
+      var td = $("<td>");
+
+      var label = $("<label for='' class='form-label'>" + name + "</label>");
+      var labelval = $("<span>").addClass("raster-image-preview-setting-label");
+      $(labelval).attr("raster-field", id).attr("svgid", svgid);
+      $(labelval).html(" = " + val);
+      $(label).append(labelval);
+
+      var input = $("<input type='range'>").addClass("form-range");
+      $(input).addClass("raster-image-preview-setting");
+      $(input).attr("raster-field", id).attr("svgid", svgid);
+      $(input).attr("min", min).attr("max", max).attr("step", step).val(val);
+      $(td).append(label);
+      $(td).append(input);
+      $(tr).append(td);
+      return tr;
+    }
+
+    function makeSwitch(svgid, text) {
+      var tr = $("<tr>");
+      var td = $("<td>");
+      var div = $("<div>").addClass("form-check form-switch");
+      var label = $("<label for='' class='form-label'>" + text + "</label>");
+      var input = $("<input type='checkbox'>").addClass("form-check-input");
+      $(input).addClass("raster-image-preview-setting");
+      $(input).attr("role", "switch");
+      $(input).attr("raster-field", "invert").attr("svgid", svgid);
+      $(div).append(input);
+      $(div).append(label);
+      $(td).append(div);
+      $(tr).append(td);
+      return tr;
+    }
+
     $.each(this.svgImages, function (id, uri) {
       var tr = $("<tr>").addClass("raster-image-preview-row").attr("svgid", id);
 
       var td1 = $("<td>").addClass("raster-image-preview");
-      var img = $("<img>")
-        .attr("src", uri)
-        .attr("svgid", id)
-        .addClass("raster-image-preview");
+
+      var img = $("<img>").attr("src", uri).attr("svgid", id).addClass("raster-image-preview");
+      $(img).attr("orig", uri);
+
       $(td1).append(img);
       $(tr).append(td1);
 
       var td2 = $("<td>").addClass("raster-image-preview-settings");
       var td2table = $("<table width='100%'>");
 
-      var e0 = $("<td>");
-      var e0label = $("<label for='' class='form-label'>Dither</label>");
-      var e0input = $("<select>").addClass("form-select");
-      $(e0input).addClass("raster-image-preview-setting");
-      $(e0input).attr("raster-field", "dither").attr("svgid", id);
-      $(e0input).append($("<option>", { value: "", text: "Default" }));
-      $(e0input).append($("<option>", { value: "atkinson", text: "Atkinson" }));
-      $(e0input).append($("<option>", { value: "stucki", text: "Stucki" }));
-      $(e0input).append($("<option>", { value: "jarvis", text: "Jarvis" }));
-      $(e0input).append($("<option>", { value: "ordered", text: "Ordered" }));
-      $(e0).append(e0label);
-      $(e0).append(e0input);
-      $(e0).append($("<hr>"));
-      $(td2table).append($("<tr>").append(e0));
+      var options = {
+        "": "No Presets",
+        gold: "Gold",
+        stucki: "Stipo",
+        jarvis: "Gravy",
+      };
+      $(td2table).append(makeSelect(id, "preset", "", options));
 
-      var e1 = $("<div>").addClass("form-check form-switch");
-      var e1label = $("<label for='' class='form-label'>Invert?</label>");
-      var e1input = $("<input type='checkbox'>").addClass("form-check-input");
-      $(e1input).addClass("raster-image-preview-setting");
-      $(e1input).attr("role", "switch");
-      $(e1input).attr("raster-field", "invert").attr("svgid", id);
-      $(e1).append(e1input);
-      $(e1).append(e1label);
-      $(td2table).append($("<tr>").append($("<td>").append(e1)));
+      $(td2table).append(makeSpacer());
 
-      var e2 = $("<tr>");
-      var e2td = $("<td>");
-      var e2label = $("<label for='' class='form-label'>Contrast</label>");
-      var e2input = $("<input type='range'>").addClass("form-range");
-      $(e2input).addClass("raster-image-preview-setting");
-      $(e2input).attr("raster-field", "contrast").attr("svgid", id);
-      $(e2input).attr("min", 0).attr("max", 5).attr("step", 0.05).val(1);
-      $(e2td).append(e2label);
-      $(e2td).append(e2input);
-      $(e2).append(e2td);
-      $(td2table).append(e2);
+      var options = {
+        "": "No Dither",
+        atkinson: "Atkinson",
+        stucki: "Stucki",
+        jarvis: "Jarvis",
+        ordered: "Ordered",
+      };
+      $(td2table).append(makeSelect(id, "dither", "", options));
 
-      var e3 = $("<tr>");
-      var e3td = $("<td>");
-      var e3label = $("<label for='' class='form-label'>Brightness</label>");
-      var e3input = $("<input type='range'>").addClass("form-range");
-      $(e3input).addClass("raster-image-preview-setting");
-      $(e3input).attr("raster-field", "brightness").attr("svgid", id);
-      $(e3input).attr("min", 0).attr("max", 5).attr("step", 0.05).val(1);
-      $(e3td).append(e3label);
-      $(e3td).append(e3input);
-      $(e3td).append($("<hr>"));
-      $(e3).append(e3td);
-      $(td2table).append(e3);
+      $(td2table).append(makeSpacer());
 
-      var e4 = $("<tr>");
-      var e4td = $("<td>");
-      var e4label = $("<label for='' class='form-label'>Threshold</label>");
-      var e4input = $("<input type='range'>").addClass("form-range");
-      $(e4input).addClass("raster-image-preview-setting");
-      $(e4input).attr("raster-field", "threshold").attr("svgid", id);
-      $(e4input).attr("min", 0).attr("max", 255).attr("step", 1).val(0);
-      $(e4td).append(e4label);
-      $(e4td).append(e4input);
-      $(e4).append(e4td);
-      $(td2table).append(e4);
+      $(td2table).append(makeRange(id, "contrast", "Contrast", 0, 5, 0.05, 1));
+      $(td2table).append(makeRange(id, "brightness", "Brightness", 0, 5, 0.05, 1));
+
+      $(td2table).append(makeSpacer());
+
+      $(td2table).append(makeSwitch(id, "Invert"));
 
       $(td2).append(td2table);
       $(tr).append(td2);
