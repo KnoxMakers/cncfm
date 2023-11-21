@@ -182,3 +182,19 @@
 #svg2laser img.raster-image-preview.inverted {
     filter: invert();
 }
+
+#svg2laser-original-svg {
+    position: absolute;
+    left: 150%;
+    top: 0;
+    padding: 0px;
+    margin: 0px;
+}
+#svg2laser-original-svg image {
+    padding: 0;
+    margin: 0;
+}
+
+#svg2laser select.raster-image-preview-setting {
+    margin-bottom: 10px;
+}

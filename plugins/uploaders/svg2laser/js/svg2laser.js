@@ -11,7 +11,10 @@ class cncfmUploader_svg2laser {
     $(document).off("change", "#svg2laser #presets");
     $(document).off("change.spectrum", "#svg2laser .colorpicker");
     $(document).off("change", "#svg2laser .pass-setting[data-setting=mode]");
-    $(document).off("change", "#svg2laser .pass-setting[data-setting=feedrate]");
+    $(document).off(
+      "change",
+      "#svg2laser .pass-setting[data-setting=feedrate]"
+    );
     $(document).off("change", "#svg2laser .pass-setting[data-setting=power]");
     $(document).off("click", "#btnsvg2laser_morepasses");
     $(document).off("change", "#svg2laser-raster-method");
@@ -20,21 +23,56 @@ class cncfmUploader_svg2laser {
     $(document).off("mouseout", "#svg2laser .raster-image-preview-row");
 
     $(document).on("change", "#svg2laser #presets", this.onPresetChange);
-    $(document).on("change.spectrum", "#svg2laser .colorpicker", this.onColorChange);
-    $(document).on("change", "#svg2laser .pass-setting[data-setting=mode]", this.onModeChange);
-    $(document).on("change", "#svg2laser .pass-setting[data-setting=feedrate]", this.onFeedrateChange);
-    $(document).on("change", "#svg2laser .pass-setting[data-setting=power]", this.onPowerChange);
+    $(document).on(
+      "change.spectrum",
+      "#svg2laser .colorpicker",
+      this.onColorChange
+    );
+    $(document).on(
+      "change",
+      "#svg2laser .pass-setting[data-setting=mode]",
+      this.onModeChange
+    );
+    $(document).on(
+      "change",
+      "#svg2laser .pass-setting[data-setting=feedrate]",
+      this.onFeedrateChange
+    );
+    $(document).on(
+      "change",
+      "#svg2laser .pass-setting[data-setting=power]",
+      this.onPowerChange
+    );
     $(document).on("click", "#btnsvg2laser_morepasses", this.addPass);
-    $(document).on("change", "#svg2laser-raster-method", this.onRasterModeChange);
-    $(document).on("change", "#svg2laser .raster-image-preview-setting", this.onRasterImagePreviewSetting);
-    $(document).on("mouseover", "#svg2laser .raster-image-preview-row", this.onRasterImagePreviewMouseOver);
-    $(document).on("mouseout", "#svg2laser .raster-image-preview-row", this.onRasterImagePreviewMouseOut);
+    $(document).on(
+      "change",
+      "#svg2laser-raster-method",
+      this.onRasterModeChange
+    );
+    $(document).on(
+      "change",
+      "#svg2laser .raster-image-preview-setting",
+      this.onRasterImagePreviewSetting
+    );
+    $(document).on(
+      "mouseover",
+      "#svg2laser .raster-image-preview-row",
+      this.onRasterImagePreviewMouseOver
+    );
+    $(document).on(
+      "mouseout",
+      "#svg2laser .raster-image-preview-row",
+      this.onRasterImagePreviewMouseOut
+    );
   }
 
   activate = function (f) {
     var reader = new FileReader();
 
     reader.addEventListener("load", function () {
+      $("#svg2laser-original-svg").remove();
+      var svg = $(reader.result).attr("id", "svg2laser-original-svg");
+      $("#svg2laser").append(svg);
       $("#svg2laser #svg-container").append(reader.result);
       cncfm.uploaders.active.readSvg();
       cncfm.uploaders.active.updatePalette();
@@ -141,7 +179,9 @@ class cncfmUploader_svg2laser {
     var mat = $("#svg2laser #presets").val();
     var config = this.config;
 
-    var s = $("<select>").addClass("form-control pass-setting").attr("data-setting", "mode");
+    var s = $("<select>")
+      .addClass("form-control pass-setting")
+      .attr("data-setting", "mode");
     $(s).append("<option val='CUSTOM'>CUSTOM</option>");
 
     if (mat && config && config.presets && config.presets[mat]) {
@@ -169,7 +209,13 @@ class cncfmUploader_svg2laser {
     var mat = $("#svg2laser #presets").val();
     var config = cncfm.uploaders.active.config;
 
-    if (mat && config && config.presets && config.presets[mat] && config.presets[mat][val]) {
+    if (
+      mat &&
+      config &&
+      config.presets &&
+      config.presets[mat] &&
+      config.presets[mat][val]
+    ) {
       var f = config.presets[mat][val]["f"];
       var p = config.presets[mat][val]["p"];
       $(tr).find("input[data-setting=feedrate]").val(f);
@@ -222,23 +268,45 @@ class cncfmUploader_svg2laser {
     var field = $(this).attr("raster-field");
     var val = $(this).val();
     var svgid = $(this).attr("svgid");
+    var rowsel = ".raster-image-preview-row[svgid=" + svgid + "]";
     var sel = ".raster-image-preview-setting[svgid=" + svgid + "]";
+    var imgsel = "#svg2laser #svg-container image[id=" + svgid + "]";
+    var labelsel = ".raster-image-preview-setting-label[svgid=" + svgid + "]";
     var filter = "opacity(100%) grayscale(100%)";
 
+    $(rowsel + " .manual-settings").hide();
+    var presetval = $(sel + "[raster-field=preset").val();
     var invertval = $(sel + "[raster-field=invert]").is(":checked") ? 1 : 0;
-    var brightval = $(sel + "[raster-field=brightness]").val();
-    var contrastval = $(sel + "[raster-field=contrast]").val();
-    var thresholdval = $(sel + "[raster-field=threshold]").val();
 
-    if (invertval == 1) {
-      filter += " invert(100%)";
+    var data = {
+      svgid: svgid,
+      preset: presetval,
+      settings: {
+        invert: invertval,
+      },
+      img: $(imgsel).attr("orig"),
+      width: $(imgsel).attr("svgw"),
+      height: $(imgsel).attr("svgh"),
+    };
+
+    if (presetval == "manual") {
+      $(rowsel + " .manual-settings").show();
+      var fields = [
+        "dither",
+        "brightness",
+        "contrast",
+        "unsharp_radius",
+        "unsharp_percent",
+      ];
+      $.each(fields, function (key, field) {
+        var fieldsel = "[raster-field=" + field + "]";
+        var fieldval = $(sel + fieldsel).val();
+        $(labelsel + fieldsel).html(" = " + fieldval);
+        data["settings"][field] = fieldval;
+      });
     }
-    filter += " brightness(" + brightval + ")";
-    filter += " contrast(" + contrastval + ")";
 
-    $("img.raster-image-preview[svgid=" + svgid + "]").css("filter", filter);
-    $("#svg2laser #svg-container image[id=" + svgid + "]").css("filter", filter);
-    $(".raster-image-preview-setting-label[svgid=" + svgid + "][raster-field=" + field + "]").html(" = " + val);
+    cncfm.api.call("image/rasterPrepare", data, function () {});
   };
 
   addPass = function () {
@@ -248,20 +316,28 @@ class cncfmUploader_svg2laser {
     var td1 = $("<td>").css("text-align", "center").html(i);
 
     var td2 = $("<td>").css("text-align", "center");
-    var c = $("<input type='text'>").addClass("pass-setting colorpicker").attr("data-setting", "color");
+    var c = $("<input type='text'>")
+      .addClass("pass-setting colorpicker")
+      .attr("data-setting", "color");
     $(td2).append(c);
 
     var td3 = $("<td>");
-    var ps = cncfm.uploaders.active.getPresetSelect().attr("disabled", "disabled");
+    var ps = cncfm.uploaders.active
+      .getPresetSelect()
+      .attr("disabled", "disabled");
     $(td3).append(ps);
 
     var td4 = $("<td>");
-    var ifeed = $("<input type='number' step='100' min='100' maxsize='5' class='form-control pass-setting' data-setting='feedrate' disabled='disabled'>");
+    var ifeed = $(
+      "<input type='number' step='100' min='100' maxsize='5' class='form-control pass-setting' data-setting='feedrate' disabled='disabled'>"
+    );
     $(td4).append(ifeed);
 
     var td5 = $("<td>");
     var ipwrgroup = $("<div class='input-group'>");
-    var ipwr = $("<input class='form-control pass-setting' type='number' step=1 min=1 max=100 data-setting='power' disabled='disabled'>");
+    var ipwr = $(
+      "<input class='form-control pass-setting' type='number' step=1 min=1 max=100 data-setting='power' disabled='disabled'>"
+    );
     var ipwraddon = $("<span class='input-group-text'>%</span>");
     $(ipwrgroup).append(ipwr).append(ipwraddon);
     $(td5).append(ipwrgroup);
@@ -350,29 +426,40 @@ class cncfmUploader_svg2laser {
       return tr;
     }
 
-    $.each(this.svgImages, function (id, uri) {
+    $.each(this.svgImages, function (id, img) {
       var tr = $("<tr>").addClass("raster-image-preview-row").attr("svgid", id);
 
       var td1 = $("<td>").addClass("raster-image-preview");
 
-      var img = $("<img>").attr("src", uri).attr("svgid", id).addClass("raster-image-preview");
-      $(img).attr("orig", uri);
+      var imgtag = $("<img>")
+        .attr("src", img.uri)
+        .attr("orig", img.uri)
+        .attr("svgx", img.x)
+        .attr("svgy", img.y)
+        .attr("svgw", img.width)
+        .attr("svgh", img.height)
+        .attr("svgid", id)
+        .addClass("raster-image-preview");
 
-      $(td1).append(img);
+      $(td1).append(imgtag);
       $(tr).append(td1);
 
       var td2 = $("<td>").addClass("raster-image-preview-settings");
       var td2table = $("<table width='100%'>");
+      var manualtable = $("<table width='100%'>")
+        .addClass("manual-settings")
+        .hide();
+
+      $(td2table).append(makeSwitch(id, "Invert"));
 
       var options = {
-        "": "No Presets",
-        gold: "Gold",
-        stucki: "Stipo",
-        jarvis: "Gravy",
+        "": "Raw",
+        manual: "Manual",
+        gold: "Preset: Gold",
+        stucki: "Preset: Stipo",
+        jarvis: "Preset: Gravy",
       };
       $(td2table).append(makeSelect(id, "preset", "", options));
-
-      $(td2table).append(makeSpacer());
 
       var options = {
         "": "No Dither",
@@ -381,18 +468,25 @@ class cncfmUploader_svg2laser {
         jarvis: "Jarvis",
         ordered: "Ordered",
       };
-      $(td2table).append(makeSelect(id, "dither", "", options));
+      $(manualtable).append(makeSelect(id, "dither", "", options));
 
-      $(td2table).append(makeSpacer());
+      //$(manualtable).append(makeSpacer());
 
-      $(td2table).append(makeRange(id, "contrast", "Contrast", 0, 5, 0.05, 1));
-      $(td2table).append(makeRange(id, "brightness", "Brightness", 0, 5, 0.05, 1));
-
-      $(td2table).append(makeSpacer());
-
-      $(td2table).append(makeSwitch(id, "Invert"));
+      $(manualtable).append(
+        makeRange(id, "contrast", "Contrast", 0, 5, 0.05, 1)
+      );
+      $(manualtable).append(
+        makeRange(id, "brightness", "Brightness", 0, 5, 0.05, 1)
+      );
+      $(manualtable).append(
+        makeRange(id, "unsharp_radius", "Sharpen (r)", 0, 50, 1, 0)
+      );
+      $(manualtable).append(
+        makeRange(id, "unsharp_percent", "Sharpen (%)", 0, 1000, 25, 0)
+      );
 
       $(td2).append(td2table);
+      $(td2).append(manualtable);
       $(tr).append(td2);
 
       $("#raster-image-table").append(tr);
@@ -403,6 +497,7 @@ class cncfmUploader_svg2laser {
     var raster = false;
     var svgColors = [];
     var svgImages = {};
+    var svgRect = $("#svg2laser-original-svg")[0].getBoundingClientRect();
 
     $("#svg2laser #svg-container svg")
       .find("*")
@@ -413,7 +508,16 @@ class cncfmUploader_svg2laser {
           raster = true;
           var id = $(this).prop("id");
           var uri = $(this).attr("xlink:href");
-          svgImages[id] = uri;
+          var imgRect = $(
+            "#svg2laser-original-svg #" + id
+          )[0].getBoundingClientRect();
+          svgImages[id] = {
+            uri: uri,
+            x: Math.round(imgRect.left - svgRect.left),
+            y: Math.round(imgRect.top - svgRect.top),
+            width: Math.round(imgRect.width),
+            height: Math.round(imgRect.height),
+          };
         } else {
           color = $(this).css("stroke");
           if (!color.startsWith("rgb")) color = "none";
