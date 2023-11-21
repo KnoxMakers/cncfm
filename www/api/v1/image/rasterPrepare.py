@@ -113,12 +113,16 @@ class RasterPrepare:
         ),
     }
 
+    def reset (self):
+        self.img = self.original
+
     def fromURI(self, uri):
         import urllib.request
         import io
         with urllib.request.urlopen(uri) as data:
             datafile = io.BytesIO(data.read())
-        self.img = Image.open(datafile)
+        self.original = Image.open(datafile)
+        self.img = self.original
         return self.img
 
     def resample(self, dpi):
@@ -266,34 +270,32 @@ class RasterPrepare:
                         pix[xn, yn] += error * diffusion_coefficient
         return diff
 
-    def pepare(self, method):
+    def preset(self, method):
 
-        match method:
+        if method == "Gold":
+                self.resample(333)
+                self.grayscale()
+                self.contrast(25)
+                self.brightness(25)
+                self.unsharp_mask(500, 4, 0)
+                self.dither()
 
-            case "Gold":
-                self.img = self.resample(333)
-                self.img = self.grayscale()
-                self.img = self.contrast(25)
-                self.img = self.brightness(25)
-                self.img = self.unsharp_mask(500, 4, 0)
-                self.img = self.dither()
-
-            case "Stipo":
-                self.img = self.resample(500)
-                self.img = self.grayscale()
-                self.img = self.tone("spline", [
+        elif method == "Stipo":
+                self.resample(500)
+                self.grayscale()
+                self.tone("spline", [
                     [0, 0], [100, 150], [255, 255]
                 ])
-                self.img = self.gamma(3.5)
-                self.img = self.unsharp_mask(500, 20, 6)
-                self.img = self.dither()
+                self.gamma(3.5)
+                self.unsharp_mask(500, 20, 6)
+                self.dither()
 
-            case "Gravy":
-                self.img = self.resample(333)
-                self.img = self.grayscale()
-                self.img = self.auto_contrast(3)
-                self.img = self.unsharp_mask(500, 4, 0)
-                self.img = self.tone("line", [
+        elif method == "Gravy":
+                self.resample(333)
+                self.grayscale()
+                self.auto_contrast(3)
+                self.unsharp_mask(500, 4, 0)
+                self.tone("line", [
                     (2, 32),
                     (9, 50),
                     (30, 84),
@@ -306,22 +308,32 @@ class RasterPrepare:
                     (206, 246),
                     (256, 254),
                 ])
-                self.img = self.dither()
+                self.dither()
 
-            case "Xin":
-                self.img = self.resample(500)
-                self.img = self.grayscale()
-                self.img = self.tone("spline", [
+        elif method == "Xin":
+                self.resample(500)
+                self.grayscale()
+                self.tone("spline", [
                     [0, 0], [100, 125], [255, 255]
                 ])
-                self.img = self.unsharp_mask(100, 8, 0)
-                self.img = self.dither()
+                self.unsharp_mask(100, 8, 0)
+                self.dither()
 
-            case "Newsy":
-                self.img = self.resample(500)
-                self.img = self.grayscale()
-                self.img = self.contrast(25)
-                self.img = self.halftone(black=True)
-                self.img = self.dither()
+        elif method == "Newsy":
+                self.resample(500)
+                self.grayscale()
+                self.contrast(25)
+                self.halftone(black=True)
+                self.dither()
 
         return self.img
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 2:
+        exit()
+
+    fp = open(sys.argv[1])
+
+    fp.close()
