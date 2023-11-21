@@ -9,13 +9,13 @@ $config = $job["config"];
 // convert objects to path
 $svg = tempnam(sys_get_temp_dir(), 'svg2gcode') . ".svg";
 $bin = $config["inkscape"]["bin"];
-if (!empty($bin) && file_exists($bin)){
+if (!empty($bin) && file_exists($bin)) {
     $e = "xvfb-run $bin --actions=\"file-open:$datafile;select-all:no-groups;object-to-path;select-all:no-layers;selection-ungroup;export-filename:$svg;export-do;file-close\"";
     $ret = bin_exec($e, $stdout, $stderr);
     if (intval($ret) > 0) {
         job_error($user, $jobid, $stderr);
     }
-}else{
+} else {
     copy($datafile, $svg);
 }
 
@@ -55,7 +55,7 @@ if ($options["has_vector"] > 0) {
     foreach ($options["passes"] as $pass) {
         $color = $pass["color"];
         $feedrate = $pass["feedrate"];
-        $power = sprintf($mpformat, $minp + (($maxp-$minp)*($pass["power"] / 100.0)));
+        $power = sprintf($mpformat, $minp + (($maxp - $minp) * ($pass["power"] / 100.0)));
         $e1 .= " --laserpass=\"$color:$feedrate:$power\"";
         $i++;
     }
@@ -89,8 +89,15 @@ if (($options["has_raster"] > 0) && ($options["raster"]["enable"] == "Y")) {
     $mpformat = $config["machine"]["power-format"];
     $rpmin = $options["raster"]["minpower"];
     $rpmax = $options["raster"]["maxpower"];
-    $rpmin = sprintf($mpformat, $mpmin + ($mpmax-$mpmin) * ($rpmin / 100.0));
-    $rpmax = sprintf($mpformat, $mpmax * ($rpmax / 100.0));
+
+    //$rpmin = sprintf($mpformat, $mpmin + ($mpmax - $mpmin) * ($rpmin / 100.0));
+    //$rpmax = sprintf($mpformat, $mpmax * ($rpmax / 100.0));
+
+    $rpmin = $mpmin + ($mpmax - $mpmin) * ($rpmin / 100.0);
+    $rpmax = $mpmin + ($mpmax - $mpmin) * ($rpmax / 100.0);
+
+    $rpmin = sprintf($mpformat, $rpmin);
+    $rpmax = sprintf($mpformat, $rpmax);
 
     $e2 = "$bin1 --filename=$tmpname";
     $e2 .= " --gcode_header=\"" . $config["machine"]["gcodeHeader"] . "\"";
@@ -99,9 +106,7 @@ if (($options["has_raster"] > 0) && ($options["raster"]["enable"] == "Y")) {
     $e2 .= " --gcode_off=\"" . $config["machine"]["gcodeOff"] . "\"";
     $e2 .= " --gcode_power=\"" . $config["machine"]["gcodePower"] . "\"";
     $e2 .= " --method=\"" . $options["raster"]["method"] . "\"";
-    $e2 .= " --algorithm=\"" . $options["raster"]["algorithm"] . "\"";
     $e2 .= " --dpi=\"" . $options["raster"]["dpi"] . "\"";
-    $e2 .= " --threshold=\"" . $options["raster"]["threshold"] . "\"";
     $e2 .= " --feedrate=\"" . $options["raster"]["feedrate"] . "\"";
     $e2 .= " --minpower=\"" . $rpmin . "\"";
     $e2 .= " --maxpower=\"" . $rpmax . "\"";
@@ -111,6 +116,7 @@ if (($options["has_raster"] > 0) && ($options["raster"]["enable"] == "Y")) {
         $e2 .= " --bjj_image_dir=\"" . $config["machine"]["bjjImageDir"] . "\"";
     }
     $e2 .= " $svg";
+    echo "$e2\n";
 
     $stdout = false;
     $stderr = "";

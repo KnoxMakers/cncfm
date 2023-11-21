@@ -1,14 +1,10 @@
 import sys
 import inkex
 from PIL import Image
-from dither import Dither
 import urllib.request
 import requests
 from io import BytesIO
 import glob
-
-dither = Dither()
-
 
 class svg2raster(inkex.EffectExtension):
     fp = None
@@ -22,13 +18,11 @@ class svg2raster(inkex.EffectExtension):
     def add_arguments(self, pars):
         pars.add_argument("--filename", type=str, default="")
         pars.add_argument("--method", type=str, default="gcode")
-        pars.add_argument("--algorithm", type=str, default="raw")
         pars.add_argument("--dpi", type=float, default=300)
         pars.add_argument("--minpower", type=float, default=0)
         pars.add_argument("--maxpower", type=float, default=255)
         pars.add_argument("--precision", type=int, default=0)
         pars.add_argument("--feedrate", type=int, default=0)
-        pars.add_argument("--threshold", type=int, default=20)
         pars.add_argument("--gcode_header", type=str, default="")
         pars.add_argument("--gcode_footer", type=str, default="")
         pars.add_argument("--gcode_on", type=str, default="M3")
@@ -36,33 +30,7 @@ class svg2raster(inkex.EffectExtension):
         pars.add_argument("--gcode_power", type=str, default="S{power}\n")
         pars.add_argument("--bjj_image_dir", type=str, default="")
 
-    def image2dither(self, img):
-        img = img.convert("RGBA")
-        background = Image.new('RGBA', img.size, (255, 255, 255))
-        img = Image.alpha_composite(background, img)
-        img = img.convert("RGB")
-        if self.options.algorithm in dither.error_diffusion_matrices.keys():
-            print("dithering => {}".format(self.options.algorithm))
-            img_np = dither.pil2numpy(img)
-            img_np = dither.error_diffusion(img_np,
-                                            '1bit_gray',
-                                            self.options.algorithm)
-            img = dither.numpy2pil(img_np)
-            return img.convert("1")
-        elif self.options.algorithm in dither.ordered_diffusion_matrices.keys():
-            print("dithering => {}".format(self.options.algorithm))
-            img_np = dither.pil2numpy(img)
-            img_np = dither.ordered_dither(img_np,
-                                           '1bit_gray',
-                                           self.options.algorithm)
-            img = dither.numpy2pil(img_np)
-            return img.convert("1")
-
-        return img.convert("L")
-
     def getPower(self, pixel):
-        if (255-pixel) <= self.options.threshold:
-            return 0
         percentage = (255.0 - float(pixel)) / 255.0
         rangesize = self.options.maxpower - self.options.minpower
         power = float(self.options.minpower) + (percentage * rangesize)
@@ -77,13 +45,9 @@ class svg2raster(inkex.EffectExtension):
         self.gcodeComment("-"*30)
         self.gcodeComment("     method: " +
                           str(self.options.method), length=30)
-        self.gcodeComment("  algorithm: " +
-                          str(self.options.algorithm), length=30)
         self.gcodeComment("        dpi: " + str(self.options.dpi), length=30)
         self.gcodeComment("   feedrate: " +
                           str(self.options.feedrate), length=30)
-        self.gcodeComment("  threshold: " +
-                          str(self.options.threshold), length=30)
         self.gcodeComment("   minpower: " +
                           str(self.options.minpower), length=30)
         self.gcodeComment("   maxpower: " +
@@ -132,7 +96,6 @@ class svg2raster(inkex.EffectExtension):
         return False
 
     def image2gcode(self, img, x, y, w, h):
-        img = self.image2dither(img)
         dpmm = self.options.dpi / 25.4
         pixw = int(w * dpmm)
         pixelSizeW = w / pixw
@@ -191,7 +154,6 @@ class svg2raster(inkex.EffectExtension):
         return i, "{}/raster-{}.jpg".format(d, i)
 
     def image2bjj(self, img, x, y, w, h):
-        img = self.image2dither(img)
         i, fname = self.getBjjImageFilename()
         img.save(fname)
         gap = 25.4 * (1/self.options.dpi)

@@ -198,3 +198,14 @@
 #svg2laser select.raster-image-preview-setting {
     margin-bottom: 10px;
 }
+
+#svg2laser tr.raster-image-preview-row.overlay {
+    background-image: url(img/loader.gif);
+    background-size: 250px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#svg2laser tr.raster-image-preview-row.overlay * {
+    opacity: 0;
+}

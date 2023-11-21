@@ -23,7 +23,7 @@ halftone (black: True, sample: 10, angle: 22, oversample: 2)
 """
 
 from PIL import ImageEnhance, ImageFilter, ImageOps
-from PIL import Image, ImageDraw, ImageStat
+from PIL import Image, ImageDraw, ImageStat, ExifTags
 
 
 class RasterPrepare:
@@ -113,6 +113,21 @@ class RasterPrepare:
         ),
     }
 
+    def __init__(self, img=None, uri=None, width=None, height=None):
+        if img:
+            self.original = img
+            self.img = img
+        elif uri:
+            self.fromURI(uri)
+
+        if width and height:
+            self.width = int(width)
+            self.height = int(height)
+        elif self.img:
+            w, h = self.img.size
+            self.width = int(w)
+            self.height = int(h)
+
     def reset (self):
         self.img = self.original
 
@@ -125,12 +140,46 @@ class RasterPrepare:
         self.img = self.original
         return self.img
 
+    def toURI(self):
+        import base64
+        import io
+        buffered = io.BytesIO()
+        self.img.save(buffered, format="PNG")
+        uri = "data:image/png;base64,"
+        uri += base64.b64encode(buffered.getvalue()).decode("utf-8")
+        return uri
+
+    def fixOrientation(self):
+
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation]=='Orientation':
+                break
+        
+        exif = self.img._getexif()
+
+        if not exif or orientation not in exif:
+            return
+
+        if exif[orientation] == 3:
+            self.img = self.img.rotate(180, expand=True)
+        elif exif[orientation] == 6:
+            self.img = self.img.rotate(270, expand=True)
+        elif exif[orientation] == 8:
+            self.img = self.img.rotate(90, expand=True)
+
     def resample(self, dpi):
-        new_width = self.width * dpi * 25.4
-        new_height = self.height * dpi * 25.4
-        self.img = self.orig.resize((new_width, new_height))
+        new_width = int((self.width / 96.0) * dpi)
+        new_height = int((self.height / 96.0) * dpi)
+        self.img = self.original.resize((new_width, new_height))
         return self.img
 
+    def invert(self):
+        mode = self.img.mode
+        self.img = self.img.convert("L")
+        self.img = ImageOps.invert(self.img)
+        self.img = self.img.convert(mode)
+        return self.img
+        
     def grayscale(self):
         self.img = ImageOps.grayscale(self.img)
         return self.img
@@ -168,7 +217,7 @@ class RasterPrepare:
                 crimp(pow(i / 255, (1.0 / amount)) * 255)
                 for i in range(256)
             ]
-        self.img = image.point(lut)
+        self.img = self.img.point(lut)
         return self.img
 
     def unsharp_mask(self, percent, radius, threshold):
@@ -177,12 +226,78 @@ class RasterPrepare:
         return self.img
 
     def tone(self, type, values):
+        def tone_line(p):
+            N = len(p) - 1
+            try:
+                m = [(p[i + 1][1] - p[i][1]) / (p[i + 1][0] - p[i][0]) for i in range(0, N)]
+            except ZeroDivisionError:
+                m = [1] * N
+            # b = y - mx
+            b = [p[i][1] - (m[i] * p[i][0]) for i in range(0, N)]
+            r = list()
+            for i in range(0, p[0][0]):
+                r.append(0)
+            for i in range(len(p) - 1):
+                x0 = p[i][0]
+                x1 = p[i + 1][0]
+                range_list = [int(round((m[i] * x) + b[i])) for x in range(x0, x1)]
+                r.extend(range_list)
+            for i in range(p[-1][0], 256):
+                r.append(255)
+            r.append(round(int(p[-1][1])))
+            return r
+
+        def tone_spline(p):
+            """
+            Spline interpreter.
+
+            Returns all integer locations between different spline interpolation values
+            @param p: points to be quad spline interpolated.
+            @return: integer y values for given spline points.
+            """
+            try:
+                N = len(p) - 1
+                w = [(p[i + 1][0] - p[i][0]) for i in range(0, N)]
+                h = [(p[i + 1][1] - p[i][1]) / w[i] for i in range(0, N)]
+                ftt = (
+                    [0]
+                    + [3 * (h[i + 1] - h[i]) / (w[i + 1] + w[i]) for i in range(0, N - 1)]
+                    + [0]
+                )
+                A = [(ftt[i + 1] - ftt[i]) / (6 * w[i]) for i in range(0, N)]
+                B = [ftt[i] / 2 for i in range(0, N)]
+                C = [h[i] - w[i] * (ftt[i + 1] + 2 * ftt[i]) / 6 for i in range(0, N)]
+                D = [p[i][1] for i in range(0, N)]
+            except ZeroDivisionError:
+                return list(range(256))
+            r = list()
+            for i in range(0, p[0][0]):
+                r.append(0)
+            for i in range(len(p) - 1):
+                a = p[i][0]
+                b = p[i + 1][0]
+                r.extend(
+                    int(
+                        round(
+                            A[i] * (x - a) ** 3
+                            + B[i] * (x - a) ** 2
+                            + C[i] * (x - a)
+                            + D[i]
+                        )
+                    )
+                    for x in range(a, b)
+                )
+            for i in range(p[-1][0], 256):
+                r.append(255)
+            r.append(round(int(p[-1][1])))
+            return r
+
         self.img = self.img.convert("P")
         if type == "spline":
-            spline = ImageNode.spline(values)
+            spline = tone_spline(values)
         else:
             values = [q for q in values if q is not None]
-            spline = ImageNode.line(values)
+            spline = tone_line(values)
         if len(spline) < 256:
             spline.extend([255] * (256 - len(spline)))
         if len(spline) > 256:
@@ -244,7 +359,8 @@ class RasterPrepare:
             )
         )
         half_tone = half_tone.resize(original_image.size)
-        return half_tone
+        self.img = half_tone
+        return self.img
 
     def dither(self, method="Floyd-Steinberg"):
         """
@@ -253,9 +369,9 @@ class RasterPrepare:
         https://github.com/hbldh/hitherdither
         """
 
-        diff_map = _DIFFUSION_MAPS.get(method.lower())
+        diff_map = self._DIFFUSION_MAPS.get(method.lower())
         if diff_map is None:
-            raise NotImplementedError
+            return 
         diff = self.img.convert("F")
         pix = diff.load()
         width, height = self.img.size
@@ -268,19 +384,23 @@ class RasterPrepare:
                     xn, yn = x + dx, y + dy
                     if (0 <= xn < width) and (0 <= yn < height):
                         pix[xn, yn] += error * diffusion_coefficient
-        return diff
+        diff = diff.convert("L")
+        self.img = diff
+        return self.img
 
     def preset(self, method):
 
-        if method == "Gold":
+        method = method.lower()
+
+        if method == "gold":
                 self.resample(333)
                 self.grayscale()
-                self.contrast(25)
-                self.brightness(25)
+                self.contrast(1.25)
+                self.brightness(1.25)
                 self.unsharp_mask(500, 4, 0)
                 self.dither()
 
-        elif method == "Stipo":
+        elif method == "stipo":
                 self.resample(500)
                 self.grayscale()
                 self.tone("spline", [
@@ -290,7 +410,7 @@ class RasterPrepare:
                 self.unsharp_mask(500, 20, 6)
                 self.dither()
 
-        elif method == "Gravy":
+        elif method == "gravy":
                 self.resample(333)
                 self.grayscale()
                 self.auto_contrast(3)
@@ -310,7 +430,7 @@ class RasterPrepare:
                 ])
                 self.dither()
 
-        elif method == "Xin":
+        elif method == "xin":
                 self.resample(500)
                 self.grayscale()
                 self.tone("spline", [
@@ -319,10 +439,11 @@ class RasterPrepare:
                 self.unsharp_mask(100, 8, 0)
                 self.dither()
 
-        elif method == "Newsy":
+        elif method == "newsy":
                 self.resample(500)
                 self.grayscale()
-                self.contrast(25)
+                self.contrast(1.25)
+                self.brightness(1.25)
                 self.halftone(black=True)
                 self.dither()
 
@@ -330,10 +451,59 @@ class RasterPrepare:
 
 if __name__ == "__main__":
     import sys
+    import json
 
     if len(sys.argv) != 2:
         exit()
 
-    fp = open(sys.argv[1])
+    output = {
+        "status": 1,
+        "message": ""
+    }
 
+    fp = open(sys.argv[1])
+    data = json.load(fp)
     fp.close()
+
+    output["svgid"] = data.get("svgid")
+    width = data.get("width", None)
+    height = data.get("height", None)
+
+    img = RasterPrepare(uri=data.get("img"), width=width, height=height)
+    img.fixOrientation()
+
+    if (int(data.get("invert", 0)) == 1):
+        img.invert()
+
+    preset = data.get("preset", None)
+    if preset:
+        if preset == "manual":
+            img.grayscale()
+
+            settings = data.get("settings", {})
+            if "brightness" in settings:
+                val = float(settings["brightness"])
+                img.brightness(val)
+            
+            if "contrast" in settings:
+                val = float(settings["contrast"])
+                img.contrast(val)
+
+            if "gamma" in settings:
+                val = float(settings["gamma"])
+                img.gamma(val)
+
+            if "unsharp_radius" in settings and "unsharp_percent" in settings:
+                r = int(settings.get("unsharp_radius"))
+                p = int(settings.get("unsharp_percent"))
+                img.unsharp_mask(p,r,0)
+
+            if "dither" in settings:
+                img.dither(settings.get("dither"))
+
+        else:
+            img.preset(preset)
+
+    output["img"] = img.toURI()
+
+    print(json.dumps(output))
