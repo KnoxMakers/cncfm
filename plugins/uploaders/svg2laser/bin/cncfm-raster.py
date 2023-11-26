@@ -159,6 +159,7 @@ class svg2raster(inkex.EffectExtension):
 
     def image2bjj(self, img, x, y, w, h):
         i, fname = self.getBjjImageFilename()
+        img = img.convert("L")
         img.save(fname)
         gap = 25.4 * (1/self.options.dpi)
         self.gcodePower(self.options.maxpower)
