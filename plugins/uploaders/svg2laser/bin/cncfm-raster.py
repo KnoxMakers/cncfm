@@ -6,6 +6,7 @@ import requests
 from io import BytesIO
 import glob
 
+
 class svg2raster(inkex.EffectExtension):
     fp = None
     h = 0
@@ -32,6 +33,8 @@ class svg2raster(inkex.EffectExtension):
 
     def getPower(self, pixel):
         percentage = (255.0 - float(pixel)) / 255.0
+        if percentage <= 0:
+            return 0
         rangesize = self.options.maxpower - self.options.minpower
         power = float(self.options.minpower) + (percentage * rangesize)
         return round(power, self.options.precision)
@@ -96,6 +99,7 @@ class svg2raster(inkex.EffectExtension):
         return False
 
     def image2gcode(self, img, x, y, w, h):
+        img = img.convert("L")
         dpmm = self.options.dpi / 25.4
         pixw = int(w * dpmm)
         pixelSizeW = w / pixw
@@ -181,6 +185,7 @@ class svg2raster(inkex.EffectExtension):
                 img = self.uri2image(elem.get("xlink:href"))
                 if img:
                     if self.options.method == "gcode":
+                        id = elem.get("id")
                         self.image2gcode(img, x, y, w, h)
                     elif self.options.method == "bjj":
                         self.image2bjj(img, x, y, w, h)
