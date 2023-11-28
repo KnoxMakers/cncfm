@@ -67,7 +67,7 @@ class cncfmUploader_svg2laser {
     var blob = new Blob([svg], { type: "image/svg+xml" });
     var fname = cncfm.uploaders.f.name;
     var f = new File([blob], fname, { type: "image/svg+xml" });
-    cncfm.uploaders.f = f;
+    //cncfm.uploaders.f = f;
 
     cncfm.uploaders.upload(options);
   };
