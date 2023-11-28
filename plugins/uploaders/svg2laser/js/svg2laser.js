@@ -22,6 +22,7 @@ class cncfmUploader_svg2laser {
     $(document).off("mouseover", "#svg2laser .raster-image-preview-row");
     $(document).off("mouseout", "#svg2laser .raster-image-preview-row");
     $(document).off("change", "#svg2laser #svg2laser-raster-dpi");
+    $(document).off("input", "#svg2laser .raster-image-preview-setting");
 
     $(document).on("change", "#svg2laser #presets", this.onPresetChange);
     $(document).on(
@@ -49,6 +50,11 @@ class cncfmUploader_svg2laser {
       "change",
       "#svg2laser-raster-method",
       this.onRasterModeChange
+    );
+    $(document).on(
+      "input",
+      "#svg2laser .raster-image-preview-setting",
+      this.onRasterImagePreviewSettingSlide
     );
     $(document).on(
       "change",
@@ -278,6 +284,27 @@ class cncfmUploader_svg2laser {
   onRasterImagePreviewMouseOut = function () {
     var svgid = $(this).attr("svgid");
     $("#svg2laser #svg-container image[id=" + svgid + "]").removeClass("show");
+  };
+
+  onRasterImagePreviewSettingSlide = function () {
+    var field = $(this).attr("raster-field");
+    var svgid = $(this).attr("svgid");
+    var fieldsel = "[raster-field=" + field + "]";
+    var val = $(this).val();
+    var labelsel = ".raster-image-preview-setting-label[svgid=" + svgid + "]";
+    var fields = [
+      "dither",
+      "brightness",
+      "gamma",
+      "contrast",
+      "unsharp_radius",
+      "unsharp_percent",
+      "threshold",
+    ];
+    //console.log(field, val), labelsel + ;
+    if (fields.includes(field)) {
+      $(labelsel + fieldsel).html(" = " + val);
+    }
   };
 
   onRasterImagePreviewSetting = function () {
