@@ -7,6 +7,7 @@
 #
 ######################################
 
+INKSCAPEURL="https://inkscape.org/gallery/item/44616/Inkscape-091e20e-x86_64.AppImage"
 TZ="America/New_York"
 BASEDIR=/app
 
@@ -52,7 +53,7 @@ mkdir -p $APPDIR/bin
 cp -rf $MEDIR/../* $APPDIR
 if [ ! -f $APPDIR/bin/Inkscape.AppImage ]
 then
-    wget "https://inkscape.org/gallery/item/37359/Inkscape-b0a8486-x86_64.AppImage" -O $APPDIR/bin/Inkscape.AppImage
+    wget "${INKSCAPEURL}" -O $APPDIR/bin/Inkscape.AppImage || rm -f $APPDIR/bin/Inkscape.AppImage
 fi
 
 
