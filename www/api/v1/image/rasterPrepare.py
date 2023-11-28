@@ -1,26 +1,5 @@
 #!/usr/bin/python3
 
-"""
-resample
-grayscale
-contrast (contrast: 25, brightness: 25)
-
-gamma (factor: 3.5)
-
-unsharp_mask (percent: 100, radius: 8, threshold: 0)
-             (percent: 150, radius: 1, threshold: 0)
-             (percent: 500, radius 20, threshold: 6)
-             (percent: 500, radius: 4, threshold: 0)
-             
-tone (type: spline, values [[0,0],[100,125],[255,255]])
-     (type: line, values [(2,32),(9,50),(30,84),(40,99),(76,144),(101,170),(126,193),(156,214),(181,230),(206,246),(256,254)])
-     
-dither (type: 'Floyd-Steinberg')
-
-auto_contrast (cutoff: 3)
-
-halftone (black: True, sample: 10, angle: 22, oversample: 2)
-"""
 
 from PIL import ImageEnhance, ImageFilter, ImageOps
 from PIL import Image, ImageDraw, ImageStat, ExifTags
@@ -173,7 +152,7 @@ class RasterPrepare:
     def resample(self, dpi):
         new_width = int((self.width / 96.0) * dpi)
         new_height = int((self.height / 96.0) * dpi)
-        self.img = self.original.resize((new_width, new_height))
+        self.img = self.img.resize((new_width, new_height))
         return self.img
 
     def removeBG(self):
@@ -194,7 +173,11 @@ class RasterPrepare:
         self.img = self.img.point(lambda p: p if (255-p) > threshold else 255)
         return self.img
 
-    def grayscale(self):
+    def grayscale(self, bg=None):
+        if bg:
+            img = self.img.convert('RGBA')
+            background = Image.new('RGBA', img.size, bg)
+            self.img = Image.alpha_composite(background, img)
         self.img = ImageOps.grayscale(self.img)
         return self.img
 
@@ -412,7 +395,7 @@ class RasterPrepare:
 
         if method == "gold":
             # self.resample(333)
-            self.grayscale()
+            # self.grayscale()
             self.contrast(1.25)
             self.brightness(1.25)
             self.unsharp_mask(500, 4, 0)
@@ -420,7 +403,7 @@ class RasterPrepare:
 
         elif method == "stipo":
             # self.resample(500)
-            self.grayscale()
+            # self.grayscale()
             self.tone("spline", [
                 [0, 0], [100, 150], [255, 255]
             ])
@@ -430,7 +413,7 @@ class RasterPrepare:
 
         elif method == "gravy":
             # self.resample(333)
-            self.grayscale()
+            # self.grayscale()
             self.auto_contrast(3)
             self.unsharp_mask(500, 4, 0)
             self.tone("line", [
@@ -450,7 +433,7 @@ class RasterPrepare:
 
         elif method == "xin":
             # self.resample(500)
-            self.grayscale()
+            # self.grayscale()
             self.tone("spline", [
                 [0, 0], [100, 125], [255, 255]
             ])
@@ -459,7 +442,7 @@ class RasterPrepare:
 
         elif method == "newsy":
             # self.resample(500)
-            self.grayscale()
+            # self.grayscale()
             self.contrast(1.25)
             self.brightness(1.25)
             self.halftone(black=True)
@@ -488,15 +471,22 @@ if __name__ == "__main__":
     width = data.get("width", None)
     height = data.get("height", None)
 
+    bg = None
+    if (int(data.get("invert", 0)) == 1):
+        bg = (0, 0, 0)
+    else:
+        bg = (255, 255, 255)
+
     img = RasterPrepare(uri=data.get("img"), width=width, height=height)
-    img.fixOrientation()
-    img.grayscale()
 
     if (int(data.get("removebg", 0)) == 1):
         img.removeBG()
 
     if (int(data.get("resample", 0)) == 1):
         img.resample(int(data.get("dpi")))
+
+    img.fixOrientation()
+    img.grayscale(bg)
 
     preset = data.get("preset", None)
     if preset:
