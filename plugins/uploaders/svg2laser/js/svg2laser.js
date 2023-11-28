@@ -63,11 +63,11 @@ class cncfmUploader_svg2laser {
   upload = function () {
     let options = cncfm.uploaders.active.getOptions();
 
-    var svg = $("#svg2laser #svg-container").html();
+    var svg = $("#svg2laser-original-svg").prop("outerHTML");
     var blob = new Blob([svg], { type: "image/svg+xml" });
     var fname = cncfm.uploaders.f.name;
     var f = new File([blob], fname, { type: "image/svg+xml" });
-    //cncfm.uploaders.f = f;
+    cncfm.uploaders.f = f;
 
     cncfm.uploaders.upload(options);
   };
@@ -289,9 +289,11 @@ class cncfmUploader_svg2laser {
     cncfm.api.call("image/rasterPrepare", data, function (data) {
       var svgid = data.svgid;
       var svgsel = "#svg2laser #svg-container image[id=" + svgid + "]";
+      var svg2sel = "#svg2laser-original-svg image[id=" + svgid + "]";
       var rowsel = ".raster-image-preview-row[svgid=" + svgid + "]";
       var sel = "#svg2laser img.raster-image-preview[svgid=" + svgid + "]";
       $(svgsel).attr("xlink:href", data.img);
+      $(svg2sel).attr("xlink:href", data.img);
       $(sel).attr("src", data.img);
       $(rowsel).removeClass("overlay");
     });
