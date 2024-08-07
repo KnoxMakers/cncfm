@@ -478,6 +478,8 @@ if __name__ == "__main__":
         bg = (255, 255, 255)
 
     img = RasterPrepare(uri=data.get("img"), width=width, height=height)
+    img.fixOrientation()
+
 
     if (int(data.get("removebg", 0)) == 1):
         img.removeBG()
@@ -485,7 +487,6 @@ if __name__ == "__main__":
     if (int(data.get("resample", 0)) == 1):
         img.resample(int(data.get("dpi")))
 
-    img.fixOrientation()
     img.grayscale(bg)
 
     preset = data.get("preset", None)

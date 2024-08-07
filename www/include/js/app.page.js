@@ -22,6 +22,7 @@ class cncfmPage {
 
   update = function () {
     document.title = cncfm.settings["SITE_NAME"];
+    $("#cncfm-name").html(cncfm.settings["SITE_NAME"]);
     $("#logo").attr("src", cncfm.settings["SITE_LOGO"]);
   };
 
@@ -101,7 +102,7 @@ class cncfmPage {
     cncfm.page.notifier.alert(msg);
   };
 
-  confirm = function (msg, onOk = function () { }, onCancel = function () { }) {
+  confirm = function (msg, onOk = function () {}, onCancel = function () {}) {
     cncfm.page.notifier.confirm(msg, onOk, onCancel);
   };
 }

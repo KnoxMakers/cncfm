@@ -23,6 +23,10 @@ body {
     height: 100vh;
 }
 
+.navbar-brand img {
+    vertical-align: text-bottom;
+}
+
 body::before {
     content: "Drop file anywhere to upload";
     display: none;

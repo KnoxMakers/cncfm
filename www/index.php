@@ -43,7 +43,9 @@
 
     <nav id='cncfm-nav' class="navbar navbar-dark bg-primary fixed-top" role="navigation">
         <div class="container-fluid">
-            <a class='navbar-brand' href='#'><img id='logo' src='img/logo.png' height=25 /> &nbsp; CNCFM</a>
+            <a class='navbar-brand' href='#'><img id='logo' src='img/logo.png' height=25 />
+                &nbsp; <span id='cncfm-name'>CNCFM</span>
+            </a>
 
             <form class='d-flex'>
                 <select id='selectUser' name='user' class='form-control me-2'>
@@ -162,7 +164,7 @@
                 <input type='text' class='form-control' id='cncfm-view-filename' readonly>
             </div>
             <div class='col-auto ms-auto'>
-                <button id='btnFileRename' type='button' class='btn btn-info float-right'> 
+                <button id='btnFileRename' type='button' class='btn btn-info float-right'>
                     <i class="bi bi-pencil"></i>&nbsp;&nbsp;Rename
                 </button>
             </div>
@@ -170,7 +172,7 @@
                 <div class='dropdown'>
                     <button id='btnViewFile' type='button' class='btn btn-info float-right dropdown-toggle'
                         data-bs-toggle="dropdown" aria-expanded="false"> <i
-                        class="bi bi-download"></i>&nbsp;&nbsp;Download
+                            class="bi bi-download"></i>&nbsp;&nbsp;Download
                     </button>
                     <ul class='dropdown-menu' aria-labelledby='btnViewFile'>
                         <!--<li><a class='dropdown-item' href='#'>Rename</a></li>-->
